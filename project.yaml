@@ -33,7 +33,6 @@ actions:
     outputs:
       highly_sensitive:
         cohort: output/monthly/joined/input_20*.csv.gz
-  
 
   get_age_months:
     run: >
@@ -42,3 +41,12 @@ actions:
     outputs:
       highly_sensitive:
         cohort: output/monthly/joined/input_2*.csv.gz
+  
+  generate_measures:
+    run: cohortextractor:latest generate_measures 
+      --study-definition study_definition
+      --output-dir=output/monthly
+    needs: [generate_study_population_monthly]
+    outputs:
+      moderately_sensitive:
+        measure_csv: output/monthly/measure_*_rate.csv

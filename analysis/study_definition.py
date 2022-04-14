@@ -1,4 +1,5 @@
-from cohortextractor import StudyDefinition, patients
+from itertools import groupby
+from cohortextractor import StudyDefinition, patients, Measure
 from codelists import *
 
 
@@ -237,3 +238,23 @@ study = StudyDefinition(
         }
     ),
 )
+
+measures = [
+]
+
+for test in ["alt", "ast", "bilirubin"]:
+    m = Measure(
+        id=f"{test}_rate",
+        numerator=test,
+        denominator="population"
+    )
+    measures.append(m)
+
+    for d in ["age_band", "region", "practice"]:
+        m_d = Measure(
+            id=f"{test}_{d}_rate",
+            numerator=test,
+            denominator="population",
+            group_by=d
+        )
+        measures.append(m_d)
