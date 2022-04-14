@@ -16,3 +16,9 @@ actions:
     outputs:
       highly_sensitive:
         cohort: output/weekly/input_*.csv.gz
+
+  generate_study_population_dob:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_dob --output-dir=output --output-format csv.gz
+    outputs:
+      highly_sensitive:
+        cohort: output/input_dob.csv.gz
