@@ -5,7 +5,7 @@ from codelists import *
 study = StudyDefinition(
     index_date="2019-01-01",
     default_expectations={
-        "date": {"earliest": start_date, "latest": end_date},
+        "date": {"earliest": "2017-04-01", "latest": "2022-04-01"},
         "rate": "exponential_increase",
         "incidence": 0.1,
     },
@@ -96,7 +96,6 @@ study = StudyDefinition(
 
     gi_illness=patients.with_these_clinical_events(
         codelist=hepatitis_codelist,
-        on_or_before="index_date",
         between=["index_date", "last_day_of_month(index_date)"],
         return_expectations={
             "incidence": 0.5
