@@ -14,8 +14,7 @@ study = StudyDefinition(
         """
         registered AND
         (NOT died) AND
-        (age >=0 AND age <=30) AND 
-        (sex = 'M' OR sex = 'F')
+        (age >=0 AND age <=30)
         """,
 
         registered = patients.registered_as_of(
