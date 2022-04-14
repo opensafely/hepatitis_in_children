@@ -85,7 +85,7 @@ study = StudyDefinition(
 
     hepatitis=patients.with_these_clinical_events(
         codelist=hepatitis_codelist,
-        between=["index_date", "index_date + 7 days"],
+        between=["index_date", "index_date + 6 days"],
         returning="binary_flag",
         find_last_match_in_period=True,
         return_expectations={
@@ -95,7 +95,7 @@ study = StudyDefinition(
 
     gi_illness=patients.with_these_clinical_events(
         codelist=hepatitis_codelist,
-        between=["index_date", "index_date + 7 days"],
+        between=["index_date", "index_date + 6 days"],
         find_last_match_in_period=True,
         return_expectations={
             "incidence": 0.5
@@ -104,7 +104,7 @@ study = StudyDefinition(
 
     alt=patients.with_these_clinical_events(
         codelist=alt_codelist,
-        between=["index_date", "index_date + 7 days"],
+        between=["index_date", "index_date + 6 days"],
         returning="binary_flag",
         find_last_match_in_period=True,
         return_expectations={
@@ -113,7 +113,7 @@ study = StudyDefinition(
     ),
     alt_code=patients.with_these_clinical_events(
         codelist=alt_codelist,
-        between=["index_date", "index_date + 7 days"],
+        between=["index_date", "index_date + 6 days"],
         returning="code",
         find_last_match_in_period=True,
         return_expectations={
@@ -124,7 +124,7 @@ study = StudyDefinition(
     
     alt_numeric_value=patients.with_these_clinical_events(
         codelist=alt_codelist,
-        between=["index_date", "index_date + 7 days"],
+        between=["index_date", "index_date + 6 days"],
         returning="numeric_value",
         find_last_match_in_period=True,
         return_expectations={
@@ -135,7 +135,7 @@ study = StudyDefinition(
 
     ast=patients.with_these_clinical_events(
         codelist=ast_codelist,
-        between=["index_date", "index_date + 7 days"],
+        between=["index_date", "index_date + 6 days"],
         returning="binary_flag",
         find_last_match_in_period=True,
         return_expectations={
@@ -144,7 +144,7 @@ study = StudyDefinition(
     ),
     ast_code=patients.with_these_clinical_events(
         codelist=ast_codelist,
-        between=["index_date", "index_date + 7 days"],
+        between=["index_date", "index_date + 6 days"],
         returning="code",
         find_last_match_in_period=True,
         return_expectations={
@@ -155,7 +155,7 @@ study = StudyDefinition(
     
     ast_numeric_value=patients.with_these_clinical_events(
         codelist=ast_codelist,
-        between=["index_date", "index_date + 7 days"],
+        between=["index_date", "index_date + 6 days"],
         returning="numeric_value",
         find_last_match_in_period=True,
         return_expectations={
@@ -166,7 +166,7 @@ study = StudyDefinition(
 
     bilirubin=patients.with_these_clinical_events(
         codelist=bilirubin_codelist,
-        between=["index_date", "index_date + 7 days"],
+        between=["index_date", "index_date + 6 days"],
         returning="binary_flag",
         find_last_match_in_period=True,
         return_expectations={
@@ -175,7 +175,7 @@ study = StudyDefinition(
     ),
     bilirubin_code=patients.with_these_clinical_events(
         codelist=bilirubin_codelist,
-        between=["index_date", "index_date + 7 days"],
+        between=["index_date", "index_date + 6 days"],
         returning="code",
         find_last_match_in_period=True,
         return_expectations={
@@ -186,7 +186,7 @@ study = StudyDefinition(
     
     bilirubin_numeric_value=patients.with_these_clinical_events(
         codelist=bilirubin_codelist,
-        between=["index_date", "index_date + 7 days"],
+        between=["index_date", "index_date + 6 days"],
         returning="numeric_value",
         find_last_match_in_period=True,
         return_expectations={
