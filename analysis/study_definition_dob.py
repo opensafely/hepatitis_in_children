@@ -34,12 +34,6 @@ study = StudyDefinition(
             "int": {"distribution": "population_ages"},
         },
         ),
-        sex=patients.sex(
-            return_expectations={
-                "rate": "universal",
-                "category": {"ratios": {"M": 0.49, "F": 0.5, "U": 0.01}},
-            }
-        ),
     ),
     
     dob=patients.date_of_birth(
