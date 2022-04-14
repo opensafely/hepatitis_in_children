@@ -45,7 +45,7 @@ study = StudyDefinition(
     dob=patients.date_of_birth(
     "YYYY-MM",
     return_expectations={
-        "date": {"earliest": "1950-01-01", "latest": "today"},
+        "date": {"earliest": "1992-01-01", "latest": "today"},
         "rate": "uniform",
     }
     ),
