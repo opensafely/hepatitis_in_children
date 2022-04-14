@@ -88,6 +88,7 @@ study = StudyDefinition(
         codelist=hepatitis_codelist,
         between=["index_date", "index_date + 7 days"],
         returning="binary_flag",
+        find_last_match_in_period=True,
         return_expectations={
             "incidence": 0.5
         },
@@ -96,6 +97,7 @@ study = StudyDefinition(
     gi_illness=patients.with_these_clinical_events(
         codelist=hepatitis_codelist,
         between=["index_date", "index_date + 7 days"],
+        find_last_match_in_period=True,
         return_expectations={
             "incidence": 0.5
         },
@@ -105,6 +107,7 @@ study = StudyDefinition(
         codelist=alt_codelist,
         between=["index_date", "index_date + 7 days"],
         returning="binary_flag",
+        find_last_match_in_period=True,
         return_expectations={
             "incidence": 0.5
         },
@@ -113,6 +116,7 @@ study = StudyDefinition(
         codelist=alt_codelist,
         between=["index_date", "index_date + 7 days"],
         returning="code",
+        find_last_match_in_period=True,
         return_expectations={
             "rate": "universal",
             "category": {"ratios": {"1000731000000107": 0.5, "1000981000000109": 0.5}},
@@ -123,6 +127,7 @@ study = StudyDefinition(
         codelist=alt_codelist,
         between=["index_date", "index_date + 7 days"],
         returning="numeric_value",
+        find_last_match_in_period=True,
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
             "incidence": 0.5,
@@ -133,6 +138,7 @@ study = StudyDefinition(
         codelist=ast_codelist,
         between=["index_date", "index_date + 7 days"],
         returning="binary_flag",
+        find_last_match_in_period=True,
         return_expectations={
             "incidence": 0.5
         },
@@ -141,6 +147,7 @@ study = StudyDefinition(
         codelist=ast_codelist,
         between=["index_date", "index_date + 7 days"],
         returning="code",
+        find_last_match_in_period=True,
         return_expectations={
             "rate": "universal",
             "category": {"ratios": {"1000731000000107": 0.5, "1000981000000109": 0.5}},
@@ -151,6 +158,7 @@ study = StudyDefinition(
         codelist=ast_codelist,
         between=["index_date", "index_date + 7 days"],
         returning="numeric_value",
+        find_last_match_in_period=True,
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
             "incidence": 0.5,
@@ -161,6 +169,7 @@ study = StudyDefinition(
         codelist=bilirubin_codelist,
         between=["index_date", "index_date + 7 days"],
         returning="binary_flag",
+        find_last_match_in_period=True,
         return_expectations={
             "incidence": 0.5
         },
@@ -169,6 +178,7 @@ study = StudyDefinition(
         codelist=bilirubin_codelist,
         between=["index_date", "index_date + 7 days"],
         returning="code",
+        find_last_match_in_period=True,
         return_expectations={
             "rate": "universal",
             "category": {"ratios": {"1000731000000107": 0.5, "1000981000000109": 0.5}},
@@ -179,6 +189,7 @@ study = StudyDefinition(
         codelist=bilirubin_codelist,
         between=["index_date", "index_date + 7 days"],
         returning="numeric_value",
+        find_last_match_in_period=True,
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
             "incidence": 0.5,
