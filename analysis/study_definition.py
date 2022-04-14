@@ -1,4 +1,5 @@
-from cohortextractor import StudyDefinition, patients, codelist, codelist_from_csv  # NOQA
+from cohortextractor import StudyDefinition, patients
+from codelists import *
 
 
 study = StudyDefinition(
@@ -82,6 +83,108 @@ study = StudyDefinition(
         "index_date",
         returning="pseudo_id",
         return_expectations={"int" : {"distribution": "normal", "mean": 25, "stddev": 5}, "incidence" : 0.5}
+    ),
+
+    hepatitis=patients.with_these_clinical_events(
+        codelist=hepatitis_codelist,
+        between=["index_date", "last_day_of_month(index_date)"],
+        returning="binary_flag",
+        return_expectations={
+            "incidence": 0.5
+        },
+    ),
+
+    gi_illness=patients.with_these_clinical_events(
+        codelist=hepatitis_codelist,
+        on_or_before="index_date",
+        between=["index_date", "last_day_of_month(index_date)"],
+        return_expectations={
+            "incidence": 0.5
+        },
+    ),
+
+    alt=patients.with_these_clinical_events(
+        codelist=alt_codelist,
+        between=["index_date", "last_day_of_month(index_date)"],
+        returning="binary_flag",
+        return_expectations={
+            "incidence": 0.5
+        },
+    ),
+    alt_code=patients.with_these_clinical_events(
+        codelist=alt_codelist,
+        between=["index_date", "last_day_of_month(index_date)"],
+        returning="code",
+        return_expectations={
+            "rate": "universal",
+            "category": {"ratios": {"1000731000000107": 0.5, "1000981000000109": 0.5}},
+        },
+    ),
+    
+    alt_numeric_value=patients.with_these_clinical_events(
+        codelist=alt_codelist,
+        between=["index_date", "last_day_of_month(index_date)"],
+        returning="numeric_value",
+        return_expectations={
+            "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
+            "incidence": 0.5,
+        },
+    ),
+
+    ast=patients.with_these_clinical_events(
+        codelist=ast_codelist,
+        between=["index_date", "last_day_of_month(index_date)"],
+        returning="binary_flag",
+        return_expectations={
+            "incidence": 0.5
+        },
+    ),
+    ast_code=patients.with_these_clinical_events(
+        codelist=ast_codelist,
+        between=["index_date", "last_day_of_month(index_date)"],
+        returning="code",
+        return_expectations={
+            "rate": "universal",
+            "category": {"ratios": {"1000731000000107": 0.5, "1000981000000109": 0.5}},
+        },
+    ),
+    
+    ast_numeric_value=patients.with_these_clinical_events(
+        codelist=ast_codelist,
+        between=["index_date", "last_day_of_month(index_date)"],
+        returning="numeric_value",
+        return_expectations={
+            "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
+            "incidence": 0.5,
+        },
+    ),
+
+    bilirubin=patients.with_these_clinical_events(
+        codelist=bilirubin_codelist,
+        between=["index_date", "last_day_of_month(index_date)"],
+        returning="binary_flag",
+        return_expectations={
+            "incidence": 0.5
+        },
+    ),
+    bilirubin_code=patients.with_these_clinical_events(
+        codelist=bilirubin_codelist,
+        between=["index_date", "last_day_of_month(index_date)"],
+        returning="code",
+        return_expectations={
+            "rate": "universal",
+            "category": {"ratios": {"1000731000000107": 0.5, "1000981000000109": 0.5}},
+        },
+    ),
+    
+    bilirubin_numeric_value=patients.with_these_clinical_events(
+        codelist=bilirubin_codelist,
+        between=["index_date", "last_day_of_month(index_date)"],
+        returning="numeric_value",
+        return_expectations={
+            "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
+            "incidence": 0.5,
+        },
     ),
 )
 
