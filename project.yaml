@@ -59,3 +59,10 @@ actions:
     outputs:
       moderately_sensitive:
         measure_csv: output/weekly/measure_*_rate.csv
+
+  generate_deciles_charts:
+    run: deciles-charts:v0.0.10 --input-files output/monthly/measure_*_practice_rate.csv --output-dir output/monthly
+    needs: [generate_measures]
+    outputs:
+      moderately_sensitive:
+        deciles_charts: output/monthly/deciles_chart_*.png
