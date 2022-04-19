@@ -1,2 +1,4 @@
 opensafely/alanine-aminotransferase-alt-tests/2298df3e
 opensafely/alanine-aminotransferase-alt-tests-numerical-value/78d4a307
+user/kate-mansfield/disorder-of-digestive-system-all-descendants/189e8759
+user/brian-mackenna/inflammatory-disease-of-the-liver/52b972ae
