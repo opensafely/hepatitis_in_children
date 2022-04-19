@@ -34,13 +34,11 @@ actions:
       highly_sensitive:
         cohort: output/monthly/joined/input_20*.csv.gz
   
-  join_cohorts_weekly:
+
+  get_age_months:
     run: >
-      cohort-joiner:v0.0.9
-        --lhs output/weekly/input_20*.csv.gz
-        --rhs output/input_dob.csv.gz
-        --output-dir output/weekly/joined
-    needs: [generate_study_population_weekly, generate_study_population_dob]
+      python:latest python analysis/get_age_months.py
+    needs: [join_cohorts_monthly, generate_study_population_dob]
     outputs:
       highly_sensitive:
-        cohort: output/weekly/joined/input_20*.csv.gz
+        cohort: output/monthly/joined/input_2*.csv.gz
