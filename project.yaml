@@ -5,17 +5,47 @@ expectations:
 
 actions:
 
-  generate_study_population_monthly:
-    run: cohortextractor:latest generate_cohort --study-definition study_definition --index-date-range "2017-04-01 to 2022-04-01 by month" --output-dir=output/monthly --output-format csv.gz
+  generate_study_population_monthly_1:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition --index-date-range "2017-04-01 to 2018-04-01 by month" --output-dir=output/monthly --output-format csv.gz
     outputs:
       highly_sensitive:
         cohort: output/monthly/input_*.csv.gz
+  
+  generate_study_population_monthly_2:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition --index-date-range "2018-05-01 to 2019-04-01 by month" --output-dir=output/monthly --output-format csv.gz
+    outputs:
+      highly_sensitive:
+        cohort: output/monthly/input*.csv.gz
 
-  generate_study_population_weekly:
-    run: cohortextractor:latest generate_cohort --study-definition study_definition_weekly --index-date-range "2021-04-01 to 2022-04-01 by week" --output-dir=output/weekly --output-format csv.gz
+  generate_study_population_monthly_3:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition --index-date-range "2019-05-01 to 2020-04-01 by month" --output-dir=output/monthly --output-format csv.gz
+    outputs:
+      highly_sensitive:
+        cohort: output/monthly/inpu*.csv.gz
+
+  generate_study_population_monthly_4:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition --index-date-range "2020-05-01 to 2021-04-01 by month" --output-dir=output/monthly --output-format csv.gz
+    outputs:
+      highly_sensitive:
+        cohort: output/monthly/inp*.csv.gz
+  
+  generate_study_population_monthly_5:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition --index-date-range "2021-05-01 to 2022-04-01 by month" --output-dir=output/monthly --output-format csv.gz
+    outputs:
+      highly_sensitive:
+        cohort: output/monthly/in*.csv.gz
+
+  generate_study_population_weekly_1:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_weekly --index-date-range "2021-04-01 to 2021-09-01 by week" --output-dir=output/weekly --output-format csv.gz
     outputs:
       highly_sensitive:
         cohort: output/weekly/input_*.csv.gz
+  
+  generate_study_population_weekly_2:
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_weekly --index-date-range "2021-10-01 to 2022-04-01 by week" --output-dir=output/weekly --output-format csv.gz
+    outputs:
+      highly_sensitive:
+        cohort: output/weekly/input*.csv.gz
 
   generate_study_population_dob:
     run: cohortextractor:latest generate_cohort --study-definition study_definition_dob --output-dir=output --output-format csv.gz
@@ -29,7 +59,13 @@ actions:
         --lhs output/monthly/input_20*.csv.gz
         --rhs output/input_dob.csv.gz
         --output-dir output/monthly/joined
-    needs: [generate_study_population_monthly, generate_study_population_dob]
+    needs: [
+      generate_study_population_monthly_1,
+      generate_study_population_monthly_2,
+      generate_study_population_monthly_3,
+      generate_study_population_monthly_4,
+      generate_study_population_monthly_5,
+      generate_study_population_dob]
     outputs:
       highly_sensitive:
         cohort: output/monthly/joined/input_20*.csv.gz
@@ -46,7 +82,13 @@ actions:
     run: cohortextractor:latest generate_measures 
       --study-definition study_definition
       --output-dir=output/monthly
-    needs: [generate_study_population_monthly]
+    needs: [
+      generate_study_population_monthly_1,
+      generate_study_population_monthly_2,
+      generate_study_population_monthly_3,
+      generate_study_population_monthly_4,
+      generate_study_population_monthly_5,
+      ]
     outputs:
       moderately_sensitive:
         measure_csv: output/monthly/measure_*_rate.csv
@@ -55,7 +97,7 @@ actions:
     run: cohortextractor:latest generate_measures 
       --study-definition study_definition_weekly
       --output-dir=output/weekly
-    needs: [generate_study_population_weekly]
+    needs: [generate_study_population_weekly_1, generate_study_population_weekly_2]
     outputs:
       moderately_sensitive:
         measure_csv: output/weekly/measure_*_rate.csv
