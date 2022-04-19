@@ -30,7 +30,7 @@ actions:
         cohort: output/monthly/inp*.csv.gz
   
   generate_study_population_monthly_5:
-    run: cohortextractor:latest generate_cohort --study-definition study_definition --index-date-range "2021-05-01 to 2022-04-01 by month" --output-dir=output/monthly --output-format csv.gz
+    run: cohortextractor:latest generate_cohort --study-definition study_definition --index-date-range "2021-05-01 to 2022-03-01 by month" --output-dir=output/monthly --output-format csv.gz
     outputs:
       highly_sensitive:
         cohort: output/monthly/in*.csv.gz
