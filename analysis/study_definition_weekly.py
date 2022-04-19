@@ -1,4 +1,4 @@
-from cohortextractor import StudyDefinition, patients
+from cohortextractor import StudyDefinition, patients, Measure
 from codelists import *
 
 
@@ -160,6 +160,36 @@ study = StudyDefinition(
             "incidence": 0.5,
         }
     ),
+
+    alt_operator=patients.comparator_from(
+        "alt_numeric_value",
+        return_expectations={
+            "rate": "universal",
+            "category": {
+                "ratios": {  # ~, =, >= , > , < , <=
+                    None: 0.10,
+                    "~": 0.05,
+                    "=": 0.65,
+                    ">=": 0.05,
+                    ">": 0.05,
+                    "<": 0.05,
+                    "<=": 0.05,
+                }
+            },
+            "incidence": 0.80,
+        },
+    ),
+    alt_numeric_value_out_of_range=patients.satisfying(
+        """
+        (alt_numeric_value > 90) AND
+        (
+            (alt_operator = '>') OR
+            (alt_operator = '=') OR
+            (alt_operator = '>=')
+        )
+        """
+    ),
+
     ast=patients.with_these_clinical_events(
         codelist=ast_codelist,
         between=["index_date", "index_date + 6 days"],
@@ -204,6 +234,36 @@ study = StudyDefinition(
             "incidence": 0.5,
         }
     ),
+
+    ast_operator=patients.comparator_from(
+        "ast_numeric_value",
+        return_expectations={
+            "rate": "universal",
+            "category": {
+                "ratios": {  # ~, =, >= , > , < , <=
+                    None: 0.10,
+                    "~": 0.05,
+                    "=": 0.65,
+                    ">=": 0.05,
+                    ">": 0.05,
+                    "<": 0.05,
+                    "<=": 0.05,
+                }
+            },
+            "incidence": 0.80,
+        },
+    ),
+    ast_numeric_value_out_of_range=patients.satisfying(
+        """
+        (ast_numeric_value > 90) AND
+        (
+            (ast_operator = '>') OR
+            (ast_operator = '=') OR
+            (ast_operator = '>=')
+        )
+        """
+    ),
+
     bilirubin=patients.with_these_clinical_events(
         codelist=bilirubin_codelist,
         between=["index_date", "index_date + 6 days"],
@@ -248,5 +308,64 @@ study = StudyDefinition(
             "incidence": 0.5,
         }
     ),
+    bilirubin_operator=patients.comparator_from(
+        "bilirubin_numeric_value",
+        return_expectations={
+            "rate": "universal",
+            "category": {
+                "ratios": {  # ~, =, >= , > , < , <=
+                    None: 0.10,
+                    "~": 0.05,
+                    "=": 0.65,
+                    ">=": 0.05,
+                    ">": 0.05,
+                    "<": 0.05,
+                    "<=": 0.05,
+                }
+            },
+            "incidence": 0.80,
+        },
+    ),
+    bilirubin_numeric_value_out_of_range=patients.satisfying(
+        """
+        (bilirubin_numeric_value > 90) AND
+        (
+            (bilirubin_operator = '>') OR
+            (bilirubin_operator = '=') OR
+            (bilirubin_operator = '>=')
+        )
+        """
+    ),
 )
 
+measures = [
+]
+
+for test in ["alt", "ast", "bilirubin"]:
+    m = Measure(
+        id=f"{test}_rate",
+        numerator=test,
+        denominator="population",
+        group_by="population"
+    )
+    
+    m_oor = Measure(
+        id=f"{test}_oor_rate",
+        numerator=f"{test}_numeric_value_out_of_range",
+        denominator="population",
+        group_by="population"
+    )
+    
+
+    measures.extend([m, m_oor])
+
+    
+
+    for d in ["age_band", "region", "practice"]:
+        m_d = Measure(
+            id=f"{test}_{d}_rate",
+            numerator=test,
+            denominator="population",
+            group_by=d
+        )
+        measures.append(m_d)
