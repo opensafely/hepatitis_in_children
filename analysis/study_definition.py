@@ -140,6 +140,12 @@ study = StudyDefinition(
             "incidence": 0.5,
         },
     ),
+    alt_ref_range_lower=patients.reference_range_lower_bound_from(
+        "alt_numeric_value"
+    ),
+    alt_ref_range_upper=patients.reference_range_upper_bound_from(
+        "alt_numeric_value"
+    ),
     ast=patients.with_these_clinical_events(
         codelist=ast_codelist,
         between=["index_date", "last_day_of_month(index_date)"],
@@ -167,6 +173,12 @@ study = StudyDefinition(
             "incidence": 0.5,
         },
     ),
+    ast_ref_range_lower=patients.reference_range_lower_bound_from(
+        "ast_numeric_value"
+    ),
+    ast_ref_range_upper=patients.reference_range_upper_bound_from(
+        "ast_numeric_value"
+    ),
     bilirubin=patients.with_these_clinical_events(
         codelist=bilirubin_codelist,
         between=["index_date", "last_day_of_month(index_date)"],
@@ -193,5 +205,11 @@ study = StudyDefinition(
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
             "incidence": 0.5,
         },
+    ),
+    bilirubin_ref_range_lower=patients.reference_range_lower_bound_from(
+        "bilirubin_numeric_value"
+    ),
+    bilirubin_ref_range_upper=patients.reference_range_upper_bound_from(
+        "bilirubin_numeric_value"
     ),
 )
