@@ -23,6 +23,18 @@
       "url": "https://codelists.opensafely.org/codelist/user/brian-mackenna/inflammatory-disease-of-the-liver/52b972ae/",
       "downloaded_at": "2022-04-19 11:08:33.632095Z",
       "sha": "05b77cbf544f56afe6267be9493f7642bcd4111d"
+    },
+    "user-Louis-aspartate-aminotransferase.csv": {
+      "id": "user/Louis/aspartate-aminotransferase/30cb0c08",
+      "url": "https://codelists.opensafely.org/codelist/user/Louis/aspartate-aminotransferase/30cb0c08/",
+      "downloaded_at": "2022-04-19 16:02:09.337251Z",
+      "sha": "21af391fb55c6d41c989eb2a24941c0c9810d4b3"
+    },
+    "user-Louis-bilirubin-tests.csv": {
+      "id": "user/Louis/bilirubin-tests/17bb98d3",
+      "url": "https://codelists.opensafely.org/codelist/user/Louis/bilirubin-tests/17bb98d3/",
+      "downloaded_at": "2022-04-19 16:02:09.658277Z",
+      "sha": "e47ae3924f5f1b7f26642d2ae960a16e54d8aac2"
     }
   }
 }
