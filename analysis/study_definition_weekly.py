@@ -94,7 +94,7 @@ study = StudyDefinition(
     ),
 
     gi_illness=patients.with_these_clinical_events(
-        codelist=hepatitis_codelist,
+        codelist=gi_illness_codelist,
         between=["index_date", "index_date + 6 days"],
         find_last_match_in_period=True,
         return_expectations={

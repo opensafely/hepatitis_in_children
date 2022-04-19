@@ -93,7 +93,7 @@ study = StudyDefinition(
         return_expectations={"incidence": 0.5},
     ),
     gi_illness=patients.with_these_clinical_events(
-        codelist=hepatitis_codelist,
+        codelist=gi_illness,
         between=["index_date", "last_day_of_month(index_date)"],
         find_last_match_in_period=True,
         return_expectations={"incidence": 0.5},
