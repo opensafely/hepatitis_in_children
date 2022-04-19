@@ -98,12 +98,11 @@ study = StudyDefinition(
         find_last_match_in_period=True,
         return_expectations={"incidence": 0.5},
     ),
-
     recent_positive_covid_test=patients.with_test_result_in_sgss(
         pathogen="SARS-CoV-2",
         test_result="positive",
         between=[
-            "index_date - 3 months" ,
+            "index_date - 3 months",
             "last_day_of_month(index_date)",
         ],
         returning="binary_flag",
@@ -112,7 +111,6 @@ study = StudyDefinition(
             "rate": "exponential_increase",
         },
     ),
-
     alt=patients.with_these_clinical_events(
         codelist=alt_codelist,
         between=["index_date", "last_day_of_month(index_date)"],
@@ -145,14 +143,14 @@ study = StudyDefinition(
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
             "incidence": 0.5,
-        }
+        },
     ),
     alt_ref_range_upper=patients.reference_range_upper_bound_from(
         "alt_numeric_value",
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
             "incidence": 0.5,
-        }
+        },
     ),
     alt_operator=patients.comparator_from(
         "alt_numeric_value",
@@ -174,7 +172,7 @@ study = StudyDefinition(
     ),
     alt_numeric_value_out_of_range=patients.satisfying(
         """
-        (alt_numeric_value > 90) AND
+        (alt_numeric_value > 500) AND
         (
             (alt_operator = '>') OR
             (alt_operator = '=') OR
@@ -182,7 +180,16 @@ study = StudyDefinition(
         )
         """
     ),
-
+    alt_numeric_value_out_of_ref_range=patients.satisfying(
+        """
+        (alt_numeric_value > alt_ref_range_upper) AND
+        (
+            (alt_operator = '>') OR
+            (alt_operator = '=') OR
+            (alt_operator = '>=')
+        )
+        """
+    ),
     ast=patients.with_these_clinical_events(
         codelist=ast_codelist,
         between=["index_date", "last_day_of_month(index_date)"],
@@ -215,14 +222,14 @@ study = StudyDefinition(
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
             "incidence": 0.5,
-        }
+        },
     ),
     ast_ref_range_upper=patients.reference_range_upper_bound_from(
         "ast_numeric_value",
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
             "incidence": 0.5,
-        }
+        },
     ),
     ast_operator=patients.comparator_from(
         "ast_numeric_value",
@@ -244,7 +251,17 @@ study = StudyDefinition(
     ),
     ast_numeric_value_out_of_range=patients.satisfying(
         """
-        (ast_numeric_value > 90) AND
+        (ast_numeric_value > 500) AND
+        (
+            (ast_operator = '>') OR
+            (ast_operator = '=') OR
+            (ast_operator = '>=')
+        )
+        """
+    ),
+    ast_numeric_value_out_of_ref_range=patients.satisfying(
+        """
+        (ast_numeric_value > ast_ref_range_upper) AND
         (
             (ast_operator = '>') OR
             (ast_operator = '=') OR
@@ -284,14 +301,14 @@ study = StudyDefinition(
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
             "incidence": 0.5,
-        }
+        },
     ),
     bilirubin_ref_range_upper=patients.reference_range_upper_bound_from(
         "bilirubin_numeric_value",
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
             "incidence": 0.5,
-        }
+        },
     ),
     bilirubin_operator=patients.comparator_from(
         "bilirubin_numeric_value",
@@ -311,9 +328,9 @@ study = StudyDefinition(
             "incidence": 0.80,
         },
     ),
-    bilirubin_numeric_value_out_of_range=patients.satisfying(
+    bilirubin_numeric_value_out_of_ref_range=patients.satisfying(
         """
-        (bilirubin_numeric_value > 90) AND
+        (bilirubin_numeric_value > bilirubin_ref_range_upper) AND
         (
             (bilirubin_operator = '>') OR
             (bilirubin_operator = '=') OR
@@ -323,34 +340,41 @@ study = StudyDefinition(
     ),
 )
 
-measures = [
-]
+measures = []
+
 
 for test in ["alt", "ast", "bilirubin"]:
     m = Measure(
         id=f"{test}_rate",
         numerator=test,
         denominator="population",
-        group_by="population"
+        group_by="population",
     )
-    
-    m_oor = Measure(
+
+    m_oor_ref = Measure(
         id=f"{test}_oor_rate",
-        numerator=f"{test}_numeric_value_out_of_range",
+        numerator=f"{test}_numeric_value_out_of_ref_range",
         denominator="population",
-        group_by="population"
+        group_by="population",
     )
-    
 
-    measures.extend([m, m_oor])
+    if test in ["alt", "ast"]:
 
-    
+        m_oor = Measure(
+            id=f"{test}_oor_rate",
+            numerator=f"{test}_numeric_value_out_of_range",
+            denominator="population",
+            group_by="population",
+        )
+
+        measures.extend([m, m_oor, m_oor_ref])
+
+    else:
+
+        measures.extend([m, m_oor_ref])
 
     for d in ["age_band", "region", "practice"]:
         m_d = Measure(
-            id=f"{test}_{d}_rate",
-            numerator=test,
-            denominator="population",
-            group_by=d
+            id=f"{test}_{d}_rate", numerator=test, denominator="population", group_by=d
         )
         measures.append(m_d)

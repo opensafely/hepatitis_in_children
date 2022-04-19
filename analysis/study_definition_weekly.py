@@ -181,7 +181,7 @@ study = StudyDefinition(
     ),
     alt_numeric_value_out_of_range=patients.satisfying(
         """
-        (alt_numeric_value > 90) AND
+        (alt_numeric_value > 500) AND
         (
             (alt_operator = '>') OR
             (alt_operator = '=') OR
@@ -189,7 +189,16 @@ study = StudyDefinition(
         )
         """
     ),
-
+    alt_numeric_value_out_of_ref_range=patients.satisfying(
+        """
+        (alt_numeric_value > alt_ref_range_upper) AND
+        (
+            (alt_operator = '>') OR
+            (alt_operator = '=') OR
+            (alt_operator = '>=')
+        )
+        """
+    ),
     ast=patients.with_these_clinical_events(
         codelist=ast_codelist,
         between=["index_date", "index_date + 6 days"],
@@ -255,7 +264,18 @@ study = StudyDefinition(
     ),
     ast_numeric_value_out_of_range=patients.satisfying(
         """
-        (ast_numeric_value > 90) AND
+        (ast_numeric_value > 500) AND
+        (
+            (ast_operator = '>') OR
+            (ast_operator = '=') OR
+            (ast_operator = '>=')
+        )
+        """
+    ),
+
+    ast_numeric_value_out_of_ref_range=patients.satisfying(
+        """
+        (ast_numeric_value > ast_ref_range_upper) AND
         (
             (ast_operator = '>') OR
             (ast_operator = '=') OR
@@ -326,9 +346,11 @@ study = StudyDefinition(
             "incidence": 0.80,
         },
     ),
-    bilirubin_numeric_value_out_of_range=patients.satisfying(
+
+
+    bilirubin_numeric_value_out_of_ref_range=patients.satisfying(
         """
-        (bilirubin_numeric_value > 90) AND
+        (bilirubin_numeric_value > bilirubin_ref_range_upper) AND
         (
             (bilirubin_operator = '>') OR
             (bilirubin_operator = '=') OR
@@ -343,21 +365,34 @@ measures = [
 
 for test in ["alt", "ast", "bilirubin"]:
     m = Measure(
-        id=f"{test}_rate",
-        numerator=test,
-        denominator="population",
-        group_by="population"
-    )
-    
-    m_oor = Measure(
-        id=f"{test}_oor_rate",
-        numerator=f"{test}_numeric_value_out_of_range",
-        denominator="population",
-        group_by="population"
-    )
-    
+            id=f"{test}_rate",
+            numerator=test,
+            denominator="population",
+            group_by="population"
+        )
 
-    measures.extend([m, m_oor])
+    m_oor_ref = Measure(
+            id=f"{test}_oor_rate",
+            numerator=f"{test}_numeric_value_out_of_ref_range",
+            denominator="population",
+            group_by="population"
+        ) 
+    
+    if test in ["alt", "ast"]:
+        
+        m_oor = Measure(
+            id=f"{test}_oor_rate",
+            numerator=f"{test}_numeric_value_out_of_range",
+            denominator="population",
+            group_by="population"
+        )
+
+        measures.extend([m, m_oor, m_oor_ref])
+    
+    else:
+        
+        measures.extend([m, m_oor_ref])
+
 
     
 
