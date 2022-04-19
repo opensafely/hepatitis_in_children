@@ -223,6 +223,7 @@ study = StudyDefinition(
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
             "incidence": 0.5,
         }
+    ),
     ast_operator=patients.comparator_from(
         "ast_numeric_value",
         return_expectations={
@@ -291,6 +292,7 @@ study = StudyDefinition(
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
             "incidence": 0.5,
         }
+    ),
     bilirubin_operator=patients.comparator_from(
         "bilirubin_numeric_value",
         return_expectations={
