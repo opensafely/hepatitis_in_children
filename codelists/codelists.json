@@ -1,3 +1,16 @@
 {
-  "files": {}
+  "files": {
+    "opensafely-alanine-aminotransferase-alt-tests.csv": {
+      "id": "opensafely/alanine-aminotransferase-alt-tests/2298df3e",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/alanine-aminotransferase-alt-tests/2298df3e/",
+      "downloaded_at": "2022-04-14 13:30:21.025517Z",
+      "sha": "0d231653e5ece343f6945309d21fc40c7f685ff2"
+    },
+    "opensafely-alanine-aminotransferase-alt-tests-numerical-value.csv": {
+      "id": "opensafely/alanine-aminotransferase-alt-tests-numerical-value/78d4a307",
+      "url": "https://codelists.opensafely.org/codelist/opensafely/alanine-aminotransferase-alt-tests-numerical-value/78d4a307/",
+      "downloaded_at": "2022-04-14 13:30:21.432237Z",
+      "sha": "4144fa821c5a8e560ea2aaa99b4543e58c231ed4"
+    }
+  }
 }
