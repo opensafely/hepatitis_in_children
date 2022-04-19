@@ -21,7 +21,7 @@ ast_codelist = codelist_from_csv(
 
 
 ast_numeric_value_codelist = codelist_from_csv(
-    "codelists/user-Louis-aspartate-aminotransferase.csv.csv",
+    "codelists/user-Louis-aspartate-aminotransferase.csv",
     system="snomed",
     column="code",
 )
