@@ -11,6 +11,18 @@
       "url": "https://codelists.opensafely.org/codelist/opensafely/alanine-aminotransferase-alt-tests-numerical-value/78d4a307/",
       "downloaded_at": "2022-04-14 13:30:21.432237Z",
       "sha": "4144fa821c5a8e560ea2aaa99b4543e58c231ed4"
+    },
+    "user-kate-mansfield-disorder-of-digestive-system-all-descendants.csv": {
+      "id": "user/kate-mansfield/disorder-of-digestive-system-all-descendants/189e8759",
+      "url": "https://codelists.opensafely.org/codelist/user/kate-mansfield/disorder-of-digestive-system-all-descendants/189e8759/",
+      "downloaded_at": "2022-04-19 11:08:33.323821Z",
+      "sha": "ec1474aad763a0c6f4bc2dc33d8d082b93067365"
+    },
+    "user-brian-mackenna-inflammatory-disease-of-the-liver.csv": {
+      "id": "user/brian-mackenna/inflammatory-disease-of-the-liver/52b972ae",
+      "url": "https://codelists.opensafely.org/codelist/user/brian-mackenna/inflammatory-disease-of-the-liver/52b972ae/",
+      "downloaded_at": "2022-04-19 11:08:33.632095Z",
+      "sha": "05b77cbf544f56afe6267be9493f7642bcd4111d"
     }
   }
 }
