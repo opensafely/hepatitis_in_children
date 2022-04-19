@@ -73,3 +73,10 @@ actions:
     outputs:
       moderately_sensitive:
         counts: output/*/plot_*.png
+
+  generate_notebook:
+    run: jupyter:latest jupyter nbconvert /workspace/analysis/report.ipynb --execute --to html --template basic --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400 --no-input
+    needs: [generate_plots, generate_deciles_charts]
+    outputs:
+      moderately_sensitive:
+        notebook: output/report.html
