@@ -98,6 +98,21 @@ study = StudyDefinition(
         find_last_match_in_period=True,
         return_expectations={"incidence": 0.5},
     ),
+
+    recent_positive_covid_test=patients.with_test_result_in_sgss(
+        pathogen="SARS-CoV-2",
+        test_result="positive",
+        between=[
+            "index_date - 3 months" ,
+            "last_day_of_month(index_date)",
+        ],
+        returning="binary_flag",
+        return_expectations={
+            "date": {"earliest": "2021-01-01", "latest": "2021-02-01"},
+            "rate": "exponential_increase",
+        },
+    ),
+
     alt=patients.with_these_clinical_events(
         codelist=alt_codelist,
         between=["index_date", "last_day_of_month(index_date)"],

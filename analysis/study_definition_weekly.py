@@ -102,6 +102,20 @@ study = StudyDefinition(
         },
     ),
 
+    recent_positive_covid_test=patients.with_test_result_in_sgss(
+        pathogen="SARS-CoV-2",
+        test_result="positive",
+        between=[
+            "index_date - 3 months" ,
+            "index_date + 6 days",
+        ],
+        returning="binary_flag",
+        return_expectations={
+            "date": {"earliest": "2021-01-01", "latest": "2021-02-01"},
+            "rate": "exponential_increase",
+        },
+    ),
+
     alt=patients.with_these_clinical_events(
         codelist=alt_codelist,
         between=["index_date", "index_date + 6 days"],
