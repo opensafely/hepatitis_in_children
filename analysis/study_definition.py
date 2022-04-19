@@ -141,10 +141,18 @@ study = StudyDefinition(
         },
     ),
     alt_ref_range_lower=patients.reference_range_lower_bound_from(
-        "alt_numeric_value"
+        "alt_numeric_value",
+        return_expectations={
+            "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
+            "incidence": 0.5,
+        }
     ),
     alt_ref_range_upper=patients.reference_range_upper_bound_from(
-        "alt_numeric_value"
+        "alt_numeric_value",
+        return_expectations={
+            "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
+            "incidence": 0.5,
+        }
     ),
     ast=patients.with_these_clinical_events(
         codelist=ast_codelist,
@@ -174,10 +182,18 @@ study = StudyDefinition(
         },
     ),
     ast_ref_range_lower=patients.reference_range_lower_bound_from(
-        "ast_numeric_value"
+        "ast_numeric_value",
+        return_expectations={
+            "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
+            "incidence": 0.5,
+        }
     ),
     ast_ref_range_upper=patients.reference_range_upper_bound_from(
-        "ast_numeric_value"
+        "ast_numeric_value",
+        return_expectations={
+            "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
+            "incidence": 0.5,
+        }
     ),
     bilirubin=patients.with_these_clinical_events(
         codelist=bilirubin_codelist,
@@ -207,9 +223,17 @@ study = StudyDefinition(
         },
     ),
     bilirubin_ref_range_lower=patients.reference_range_lower_bound_from(
-        "bilirubin_numeric_value"
+        "bilirubin_numeric_value",
+        return_expectations={
+            "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
+            "incidence": 0.5,
+        }
     ),
     bilirubin_ref_range_upper=patients.reference_range_upper_bound_from(
-        "bilirubin_numeric_value"
+        "bilirubin_numeric_value",
+        return_expectations={
+            "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
+            "incidence": 0.5,
+        }
     ),
 )
