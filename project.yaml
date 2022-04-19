@@ -42,7 +42,7 @@ actions:
         cohort: output/weekly/input_*.csv.gz
   
   generate_study_population_weekly_2:
-    run: cohortextractor:latest generate_cohort --study-definition study_definition_weekly --index-date-range "2021-09-09 to 2022-04-01 by week" --output-dir=output/weekly --output-format csv.gz
+    run: cohortextractor:latest generate_cohort --study-definition study_definition_weekly --index-date-range "2021-09-09 to 2022-04-14 by week" --output-dir=output/weekly --output-format csv.gz
     outputs:
       highly_sensitive:
         cohort: output/weekly/input*.csv.gz
