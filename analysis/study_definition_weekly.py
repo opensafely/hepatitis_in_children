@@ -361,8 +361,20 @@ study = StudyDefinition(
 )
 
 measures = [
-]
+    Measure(
+        id=f"gi_illness_rate",
+        numerator="gi_illness",
+        denominator="population",
+        group_by="population",
+    ),
 
+    Measure(
+        id=f"gi_illness_practice_rate", 
+        numerator="gi_illness", 
+        denominator="population",
+        group_by="practice"
+        )
+]
 for test in ["alt", "ast", "bilirubin"]:
     m = Measure(
             id=f"{test}_rate",
