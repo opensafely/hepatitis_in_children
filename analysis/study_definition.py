@@ -377,4 +377,14 @@ for test in ["alt", "ast", "bilirubin"]:
         m_d = Measure(
             id=f"{test}_{d}_rate", numerator=test, denominator="population", group_by=d
         )
-        measures.append(m_d)
+
+        if test in ["alt", "ast"]:
+            m_oor_recent_cov = Measure(
+                id=f"{test}_{d}_oor_recent_cov_rate", numerator=f"{test}_numeric_value_out_of_range", denominator="population", group_by=[d, "recent_positive_covid_test"]
+            )
+        
+        else:
+             m_oor_recent_cov = Measure(
+                id=f"{test}_{d}_oor_recent_cov_rate", numerator=f"{test}_numeric_value_out_of_ref_range", denominator="population", group_by=[d, "recent_positive_covid_test"]
+            )
+        measures.extend([m_d, m_oor_recent_cov])
