@@ -13,7 +13,6 @@ for frequency in ["monthly", "weekly"]:
         plot_measures(
             df=df,
             filename=f"{frequency}/plot_{test}",
-            title=test,
             column_to_plot="rate",
             y_label="Proportion",
             as_bar=False,
@@ -30,7 +29,6 @@ for frequency in ["monthly", "weekly"]:
             plot_measures(
                 df=df_oor,
                 filename=f"{frequency}/plot_{test}_oor",
-                title=test,
                 column_to_plot="rate",
                 y_label="Proportion",
                 as_bar=False,
@@ -55,7 +53,6 @@ for frequency in ["monthly", "weekly"]:
                 plot_measures(
                     df=demographic_df,
                     filename=f"{frequency}/plot_{test}_{d}",
-                    title=f"{test} by {d}",
                     column_to_plot="rate",
                     y_label="Proportion",
                     as_bar=False,
