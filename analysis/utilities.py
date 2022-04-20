@@ -103,11 +103,11 @@ def plot_measures(
             plt.plot(df["date"], df[column_to_plot])
 
     x_labels = sorted(df["date"].unique())
-
     plt.ylabel(y_label)
     plt.xlabel("Date")
     plt.xticks(x_labels, rotation="vertical")
     plt.title(title)
+    plt.xlim(x_labels[0], x_labels[-1])
     plt.ylim(
         bottom=0,
         top=100
