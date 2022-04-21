@@ -93,7 +93,7 @@ study = StudyDefinition(
         return_expectations={"incidence": 0.5},
     ),
     gi_illness=patients.with_these_clinical_events(
-        codelist=hepatitis_codelist,
+        codelist=gi_illness_codelist,
         between=["index_date", "last_day_of_month(index_date)"],
         find_last_match_in_period=True,
         return_expectations={"incidence": 0.5},
@@ -173,20 +173,20 @@ study = StudyDefinition(
     alt_numeric_value_out_of_range=patients.satisfying(
         """
         (alt_numeric_value > 500) AND
-        (
-            (alt_operator = '>') OR
-            (alt_operator = '=') OR
-            (alt_operator = '>=')
+        NOT (
+            (alt_operator = '<') OR
+            (alt_operator = '<=') OR
+            (alt_operator = '~')
         )
         """
     ),
     alt_numeric_value_out_of_ref_range=patients.satisfying(
         """
         (alt_numeric_value > alt_ref_range_upper) AND
-        (
-            (alt_operator = '>') OR
-            (alt_operator = '=') OR
-            (alt_operator = '>=')
+        NOT (
+            (alt_operator = '<') OR
+            (alt_operator = '<=') OR
+            (alt_operator = '~')
         )
         """
     ),
@@ -252,20 +252,20 @@ study = StudyDefinition(
     ast_numeric_value_out_of_range=patients.satisfying(
         """
         (ast_numeric_value > 500) AND
-        (
-            (ast_operator = '>') OR
-            (ast_operator = '=') OR
-            (ast_operator = '>=')
+        NOT (
+            (ast_operator = '<') OR
+            (ast_operator = '<=') OR
+            (ast_operator = '~')
         )
         """
     ),
     ast_numeric_value_out_of_ref_range=patients.satisfying(
         """
         (ast_numeric_value > ast_ref_range_upper) AND
-        (
-            (ast_operator = '>') OR
-            (ast_operator = '=') OR
-            (ast_operator = '>=')
+        NOT (
+            (ast_operator = '<') OR
+            (ast_operator = '<=') OR
+            (ast_operator = '~')
         )
         """
     ),
@@ -331,10 +331,10 @@ study = StudyDefinition(
     bilirubin_numeric_value_out_of_ref_range=patients.satisfying(
         """
         (bilirubin_numeric_value > bilirubin_ref_range_upper) AND
-        (
-            (bilirubin_operator = '>') OR
-            (bilirubin_operator = '=') OR
-            (bilirubin_operator = '>=')
+        NOT (
+            (bilirubin_operator = '<') OR
+            (bilirubin_operator = '<=') OR
+            (bilirubin_operator = '~')
         )
         """
     ),

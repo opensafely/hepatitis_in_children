@@ -3,7 +3,7 @@ from codelists import *
 
 
 study = StudyDefinition(
-    index_date="2019-01-01",
+    index_date="2022-04-01",
     default_expectations={
         "date": {"earliest": "2017-04-01", "latest": "2022-04-01"},
         "rate": "exponential_increase",
