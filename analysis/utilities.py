@@ -103,11 +103,11 @@ def plot_measures(
             plt.plot(df["date"], df[column_to_plot])
 
     x_labels = sorted(df["date"].unique())
-
     plt.ylabel(y_label)
     plt.xlabel("Date")
     plt.xticks(x_labels, rotation="vertical")
     plt.title(title)
+    plt.xlim(x_labels[0], x_labels[-1])
     plt.ylim(
         bottom=0,
         top=100
@@ -125,3 +125,16 @@ def plot_measures(
     plt.savefig(f"output/{filename}.png")
     plt.clf()
 
+def convert_binary(df, binary_column, positive, negative):
+    """Converts a column with binary variable codes as 0 and 1 to understandable strings.
+    Args:
+        df: dataframe with binary column
+        binary_column: column name of binary variable
+        positive: string to encode 1 as
+        negative: string to encode 0 as
+    Returns:
+        Input dataframe with converted binary column
+    """
+    replace_dict = {0: negative, 1: positive}
+    df[binary_column] = df[binary_column].replace(replace_dict)
+    return df
