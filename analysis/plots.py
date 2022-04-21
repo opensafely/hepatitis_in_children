@@ -1,6 +1,6 @@
 import pandas as pd
 from ebmdatalab import charts
-from utilities import OUTPUT_DIR, ANALYSIS_DIR, plot_measures, redact_small_numbers
+from utilities import OUTPUT_DIR, ANALYSIS_DIR, plot_measures, redact_small_numbers, convert_binary
 
 for frequency in ["monthly", "weekly"]:
     for test in ["alt", "ast", "bilirubin", "gi_illness"]:
@@ -63,14 +63,16 @@ for frequency in ["monthly", "weekly"]:
             )
 
             df_oor_cov["rate"] = df_oor_cov[f"value"] * 1000
+            convert_binary(df_oor_cov, "recent_positive_covid_test", "Yes", "No")
+            
             plot_measures(
-                df=df_oor,
+                df=df_oor_cov,
                 filename=f"{frequency}/plot_{test}_oor_recent_cov",
                 column_to_plot="rate",
                 title="",
                 y_label="Rate per 1000",
                 as_bar=False,
-                category="",
+                category="recent_positive_covid_test",
             )
 
             for d in ["age_band", "region"]:
