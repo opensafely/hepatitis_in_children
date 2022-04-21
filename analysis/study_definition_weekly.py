@@ -9,23 +9,20 @@ study = StudyDefinition(
         "rate": "exponential_increase",
         "incidence": 0.1,
     },
-    
     population=patients.satisfying(
         """
         registered AND
         (NOT died) AND
         (age_band != "missing")
         """,
-
-        registered = patients.registered_as_of(
-        "index_date",
-        return_expectations={"incidence": 0.9},
+        registered=patients.registered_as_of(
+            "index_date",
+            return_expectations={"incidence": 0.9},
         ),
-
-        died = patients.died_from_any_cause(
-        on_or_before="index_date",
-        returning="binary_flag",
-        return_expectations={"incidence": 0.1}
+        died=patients.died_from_any_cause(
+            on_or_before="index_date",
+            returning="binary_flag",
+            return_expectations={"incidence": 0.1},
         ),
     ),
     age_band=patients.categorised_as(
@@ -51,11 +48,10 @@ study = StudyDefinition(
                     "0-5": 0.25,
                     "6-10": 0.25,
                     "11-20": 0.25,
-                    "21-30": 0.2
+                    "21-30": 0.2,
                 }
             },
         },
-
     ),
     sex=patients.sex(
         return_expectations={
@@ -63,50 +59,50 @@ study = StudyDefinition(
             "category": {"ratios": {"M": 0.49, "F": 0.5, "U": 0.01}},
         }
     ),
-
     region=patients.registered_practice_as_of(
         "index_date",
         returning="nuts1_region_name",
-        return_expectations={"category": {"ratios": {
-            "North East": 0.1,
-            "North West": 0.1,
-            "Yorkshire and the Humber": 0.1,
-            "East Midlands": 0.1,
-            "West Midlands": 0.1,
-            "East of England": 0.1,
-            "London": 0.2,
-            "South East": 0.2, }}}
+        return_expectations={
+            "category": {
+                "ratios": {
+                    "North East": 0.1,
+                    "North West": 0.1,
+                    "Yorkshire and the Humber": 0.1,
+                    "East Midlands": 0.1,
+                    "West Midlands": 0.1,
+                    "East of England": 0.1,
+                    "London": 0.2,
+                    "South East": 0.2,
+                }
+            }
+        },
     ),
     practice=patients.registered_practice_as_of(
         "index_date",
         returning="pseudo_id",
-        return_expectations={"int" : {"distribution": "normal", "mean": 25, "stddev": 5}, "incidence" : 0.5}
+        return_expectations={
+            "int": {"distribution": "normal", "mean": 25, "stddev": 5},
+            "incidence": 0.5,
+        },
     ),
-
     hepatitis=patients.with_these_clinical_events(
         codelist=hepatitis_codelist,
         between=["index_date", "index_date + 6 days"],
         returning="binary_flag",
         find_last_match_in_period=True,
-        return_expectations={
-            "incidence": 0.5
-        },
+        return_expectations={"incidence": 0.5},
     ),
-
     gi_illness=patients.with_these_clinical_events(
         codelist=hepatitis_codelist,
         between=["index_date", "index_date + 6 days"],
         find_last_match_in_period=True,
-        return_expectations={
-            "incidence": 0.5
-        },
+        return_expectations={"incidence": 0.5},
     ),
-
     recent_positive_covid_test=patients.with_test_result_in_sgss(
         pathogen="SARS-CoV-2",
         test_result="positive",
         between=[
-            "index_date - 3 months" ,
+            "index_date - 3 months",
             "index_date + 6 days",
         ],
         returning="binary_flag",
@@ -115,15 +111,12 @@ study = StudyDefinition(
             "rate": "exponential_increase",
         },
     ),
-
     alt=patients.with_these_clinical_events(
         codelist=alt_codelist,
         between=["index_date", "index_date + 6 days"],
         returning="binary_flag",
         find_last_match_in_period=True,
-        return_expectations={
-            "incidence": 0.5
-        },
+        return_expectations={"incidence": 0.5},
     ),
     alt_code=patients.with_these_clinical_events(
         codelist=alt_codelist,
@@ -135,7 +128,6 @@ study = StudyDefinition(
             "category": {"ratios": {"1000731000000107": 0.5, "1000981000000109": 0.5}},
         },
     ),
-    
     alt_numeric_value=patients.with_these_clinical_events(
         codelist=alt_codelist,
         between=["index_date", "index_date + 6 days"],
@@ -151,16 +143,15 @@ study = StudyDefinition(
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
             "incidence": 0.5,
-        }
+        },
     ),
     alt_ref_range_upper=patients.reference_range_upper_bound_from(
         "alt_numeric_value",
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
             "incidence": 0.5,
-        }
+        },
     ),
-
     alt_operator=patients.comparator_from(
         "alt_numeric_value",
         return_expectations={
@@ -204,9 +195,7 @@ study = StudyDefinition(
         between=["index_date", "index_date + 6 days"],
         returning="binary_flag",
         find_last_match_in_period=True,
-        return_expectations={
-            "incidence": 0.5
-        },
+        return_expectations={"incidence": 0.5},
     ),
     ast_code=patients.with_these_clinical_events(
         codelist=ast_codelist,
@@ -218,7 +207,6 @@ study = StudyDefinition(
             "category": {"ratios": {"1000731000000107": 0.5, "1000981000000109": 0.5}},
         },
     ),
-    
     ast_numeric_value=patients.with_these_clinical_events(
         codelist=ast_codelist,
         between=["index_date", "index_date + 6 days"],
@@ -234,16 +222,15 @@ study = StudyDefinition(
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
             "incidence": 0.5,
-        }
+        },
     ),
     ast_ref_range_upper=patients.reference_range_upper_bound_from(
         "ast_numeric_value",
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
             "incidence": 0.5,
-        }
+        },
     ),
-
     ast_operator=patients.comparator_from(
         "ast_numeric_value",
         return_expectations={
@@ -272,7 +259,6 @@ study = StudyDefinition(
         )
         """
     ),
-
     ast_numeric_value_out_of_ref_range=patients.satisfying(
         """
         (ast_numeric_value > ast_ref_range_upper) AND
@@ -283,15 +269,12 @@ study = StudyDefinition(
         )
         """
     ),
-
     bilirubin=patients.with_these_clinical_events(
         codelist=bilirubin_codelist,
         between=["index_date", "index_date + 6 days"],
         returning="binary_flag",
         find_last_match_in_period=True,
-        return_expectations={
-            "incidence": 0.5
-        },
+        return_expectations={"incidence": 0.5},
     ),
     bilirubin_code=patients.with_these_clinical_events(
         codelist=bilirubin_codelist,
@@ -303,7 +286,6 @@ study = StudyDefinition(
             "category": {"ratios": {"1000731000000107": 0.5, "1000981000000109": 0.5}},
         },
     ),
-    
     bilirubin_numeric_value=patients.with_these_clinical_events(
         codelist=bilirubin_codelist,
         between=["index_date", "index_date + 6 days"],
@@ -319,14 +301,14 @@ study = StudyDefinition(
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
             "incidence": 0.5,
-        }
+        },
     ),
     bilirubin_ref_range_upper=patients.reference_range_upper_bound_from(
         "bilirubin_numeric_value",
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
             "incidence": 0.5,
-        }
+        },
     ),
     bilirubin_operator=patients.comparator_from(
         "bilirubin_numeric_value",
@@ -346,8 +328,6 @@ study = StudyDefinition(
             "incidence": 0.80,
         },
     ),
-
-
     bilirubin_numeric_value_out_of_ref_range=patients.satisfying(
         """
         (bilirubin_numeric_value > bilirubin_ref_range_upper) AND
@@ -367,63 +347,63 @@ measures = [
         denominator="population",
         group_by="population",
     ),
-
     Measure(
-        id=f"gi_illness_practice_rate", 
-        numerator="gi_illness", 
+        id=f"gi_illness_practice_rate",
+        numerator="gi_illness",
         denominator="population",
-        group_by="practice"
-        )
+        group_by="practice",
+    ),
 ]
+
 for test in ["alt", "ast", "bilirubin"]:
     m = Measure(
-            id=f"{test}_rate",
-            numerator=test,
-            denominator="population",
-            group_by="population"
-        )
+        id=f"{test}_rate",
+        numerator=test,
+        denominator="population",
+        group_by="population",
+    )
 
     m_oor_ref = Measure(
-            id=f"{test}_oor_rate",
-            numerator=f"{test}_numeric_value_out_of_ref_range",
-            denominator="population",
-            group_by="population"
-        ) 
-    
+        id=f"{test}_oor_rate",
+        numerator=f"{test}_numeric_value_out_of_ref_range",
+        denominator=test,
+        group_by="population",
+    )
+
     if test in ["alt", "ast"]:
-        
+        m_oor_recent_cov = Measure(
+            id=f"{test}_oor_recent_cov_rate",
+            numerator=f"{test}_numeric_value_out_of_range",
+            denominator=test,
+            group_by=["recent_positive_covid_test"],
+        )
+
+    else:
+        m_oor_recent_cov = Measure(
+            id=f"{test}_oor_recent_cov_rate",
+            numerator=f"{test}_numeric_value_out_of_ref_range",
+            denominator=test,
+            group_by=["recent_positive_covid_test"],
+        )
+
+    if test in ["alt", "ast"]:
+
         m_oor = Measure(
             id=f"{test}_oor_rate",
             numerator=f"{test}_numeric_value_out_of_range",
-            denominator="population",
-            group_by="population"
+            denominator=test,
+            group_by="population",
         )
 
-        measures.extend([m, m_oor, m_oor_ref])
-    
+        measures.extend([m, m_oor, m_oor_ref, m_oor_recent_cov])
+
     else:
-        
-        measures.extend([m, m_oor_ref])
 
-
-    
+        measures.extend([m, m_oor_ref, m_oor_recent_cov])
 
     for d in ["age_band", "region", "practice"]:
         m_d = Measure(
-            id=f"{test}_{d}_rate",
-            numerator=test,
-            denominator="population",
-            group_by=d
+            id=f"{test}_{d}_rate", numerator=test, denominator="population", group_by=d
         )
 
-        if test in ["alt", "ast"]:
-            m_oor_recent_cov = Measure(
-                id=f"{test}_{d}_oor_recent_cov_rate", numerator=f"{test}_numeric_value_out_of_range", denominator="population", group_by=[d, "recent_positive_covid_test"]
-            )
-
-        else:
-             m_oor_recent_cov = Measure(
-                id=f"{test}_{d}_oor_recent_cov_rate", numerator=f"{test}_numeric_value_out_of_ref_range", denominator="population", group_by=[d, "recent_positive_covid_test"]
-            )
-        measures.extend([m_d, m_oor_recent_cov])
-       
+        measures.extend([m_d])
