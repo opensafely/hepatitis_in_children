@@ -372,6 +372,16 @@ for test in ["alt", "ast", "bilirubin"]:
     )
 
     if test in ["alt", "ast"]:
+        m_oor_recent_cov = Measure(
+            id=f"{test}_oor_recent_cov_rate", numerator=f"{test}_numeric_value_out_of_range", denominator=test, group_by=["recent_positive_covid_test"]
+        )
+        
+    else:
+        m_oor_recent_cov = Measure(
+        id=f"{test}_oor_recent_cov_rate", numerator=f"{test}_numeric_value_out_of_ref_range", denominator=test, group_by=["recent_positive_covid_test"]
+    )
+
+    if test in ["alt", "ast"]:
 
         m_oor = Measure(
             id=f"{test}_oor_rate",
@@ -380,24 +390,15 @@ for test in ["alt", "ast", "bilirubin"]:
             group_by="population",
         )
 
-        measures.extend([m, m_oor, m_oor_ref])
+        measures.extend([m, m_oor, m_oor_ref, m_oor_recent_cov])
 
     else:
 
-        measures.extend([m, m_oor_ref])
+        measures.extend([m, m_oor_ref, m_oor_recent_cov])
 
     for d in ["age_band", "region", "practice"]:
         m_d = Measure(
             id=f"{test}_{d}_rate", numerator=test, denominator="population", group_by=d
         )
 
-        if test in ["alt", "ast"]:
-            m_oor_recent_cov = Measure(
-                id=f"{test}_{d}_oor_recent_cov_rate", numerator=f"{test}_numeric_value_out_of_range", denominator=test, group_by=[d, "recent_positive_covid_test"]
-            )
-        
-        else:
-             m_oor_recent_cov = Measure(
-                id=f"{test}_{d}_oor_recent_cov_rate", numerator=f"{test}_numeric_value_out_of_ref_range", denominator=test, group_by=[d, "recent_positive_covid_test"]
-            )
-        measures.extend([m_d, m_oor_recent_cov])
+        measures.extend([m_d])
