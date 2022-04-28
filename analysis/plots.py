@@ -1,6 +1,10 @@
 import pandas as pd
+from pathlib import Path
 from ebmdatalab import charts
 from utilities import OUTPUT_DIR, ANALYSIS_DIR, plot_measures, redact_small_numbers, convert_binary
+
+Path("output/monthly/redacted").mkdir(parents=True, exist_ok=True)
+Path("output/weekly/redacted").mkdir(parents=True, exist_ok=True)
 
 for frequency in ["monthly", "weekly"]:
     for test in ["alt", "ast", "bilirubin", "gi_illness"]:
@@ -11,9 +15,11 @@ for frequency in ["monthly", "weekly"]:
         )
         df["rate"] = df[f"value"] * 1000
         df = redact_small_numbers(
-                    df, 10, test, "population", "rate", "date"
+                    df, 5, test, "population", "rate", "date"
                 )
-
+        df.to_csv(
+            OUTPUT_DIR / f"{frequency}/redacted/measure_{test}_rate.csv", index=False
+        )
         plot_measures(
             df=df,
             filename=f"{frequency}/plot_{test}",
@@ -50,7 +56,10 @@ for frequency in ["monthly", "weekly"]:
                     parse_dates=["date"],
                 )
                 df_oor = redact_small_numbers(
-                    df_oor, 10, f"{test}_numeric_value_out_of_ref_range", test, "value", "date"
+                    df_oor, 5, f"{test}_numeric_value_out_of_ref_range", test, "value", "date"
+                )
+                df_oor.to_csv(
+                    OUTPUT_DIR / f"{frequency}/redacted/measure_{test}_oor_ref_rate.csv", index=False
                 )
             else:
                 df_oor = pd.read_csv(
@@ -58,8 +67,12 @@ for frequency in ["monthly", "weekly"]:
                     parse_dates=["date"],
                 )
                 df_oor = redact_small_numbers(
-                    df_oor, 10, f"{test}_numeric_value_out_of_range", test, "value", "date"
+                    df_oor, 5, f"{test}_numeric_value_out_of_range", test, "value", "date"
                 )
+                df_oor.to_csv(
+                    OUTPUT_DIR / f"{frequency}/redacted/measure_{test}_oor_rate.csv", index=False
+                )
+
             df_oor["rate"] = df_oor[f"value"] * 1000
             
             
@@ -84,14 +97,18 @@ for frequency in ["monthly", "weekly"]:
 
             if test == "bilirubin":
                 
-                df_oor = redact_small_numbers(
-                    df_oor, 10, f"{test}_numeric_value_out_of_ref_range", test, "value", "date"
+                df_oor_cov = redact_small_numbers(
+                    df_oor_cov, 5, f"{test}_numeric_value_out_of_ref_range", test, "value", "date"
                 )
+                
             
             else:
-                df_oor = redact_small_numbers(
-                    df_oor, 10, f"{test}_numeric_value_out_of_range", test, "value", "date"
+                df_oor_cov = redact_small_numbers(
+                    df_oor_cov, 5, f"{test}_numeric_value_out_of_range", test, "value", "date"
                 )
+            df_oor_cov.to_csv(
+                OUTPUT_DIR / f"{frequency}/redacted/measure_{test}_oor_recent_cov_rate.csv",index=False
+            )
 
             df_oor_cov["rate"] = df_oor_cov[f"value"] * 1000
 
@@ -124,7 +141,7 @@ for frequency in ["monthly", "weekly"]:
 
                 demographic_df["rate"] = demographic_df[f"value"] * 1000
                 demographic_df = redact_small_numbers(
-                    demographic_df, 10, test, "population", "rate", "date"
+                    demographic_df, 5, test, "population", "rate", "date"
                 )
 
                 plot_measures(

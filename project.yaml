@@ -109,6 +109,7 @@ actions:
       moderately_sensitive:
         counts: output/*/plot_*.png
         deciles_charts: output/*/deciles_chart_*.png
+        measure_csv: output/*/redacted/measure_*_rate.csv
 
   generate_notebook:
     run: jupyter:latest jupyter nbconvert /workspace/analysis/report.ipynb --execute --to html --template basic --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400 --no-input
