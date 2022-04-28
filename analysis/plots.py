@@ -11,7 +11,7 @@ for frequency in ["monthly", "weekly"]:
         )
         df["rate"] = df[f"value"] * 1000
         df = redact_small_numbers(
-                    df, 10, test, "population", "rate", "date"
+                    df, 5, test, "population", "rate", "date"
                 )
 
         plot_measures(
@@ -50,7 +50,7 @@ for frequency in ["monthly", "weekly"]:
                     parse_dates=["date"],
                 )
                 df_oor = redact_small_numbers(
-                    df_oor, 10, f"{test}_numeric_value_out_of_ref_range", test, "value", "date"
+                    df_oor, 5, f"{test}_numeric_value_out_of_ref_range", test, "value", "date"
                 )
             else:
                 df_oor = pd.read_csv(
@@ -58,7 +58,7 @@ for frequency in ["monthly", "weekly"]:
                     parse_dates=["date"],
                 )
                 df_oor = redact_small_numbers(
-                    df_oor, 10, f"{test}_numeric_value_out_of_range", test, "value", "date"
+                    df_oor, 5, f"{test}_numeric_value_out_of_range", test, "value", "date"
                 )
             df_oor["rate"] = df_oor[f"value"] * 1000
             
@@ -84,13 +84,13 @@ for frequency in ["monthly", "weekly"]:
 
             if test == "bilirubin":
                 
-                df_oor = redact_small_numbers(
-                    df_oor, 10, f"{test}_numeric_value_out_of_ref_range", test, "value", "date"
+                df_oor_cov = redact_small_numbers(
+                    df_oor_cov, 5, f"{test}_numeric_value_out_of_ref_range", test, "value", "date"
                 )
             
             else:
-                df_oor = redact_small_numbers(
-                    df_oor, 10, f"{test}_numeric_value_out_of_range", test, "value", "date"
+                df_oor_cov = redact_small_numbers(
+                    df_oor_cov, 5, f"{test}_numeric_value_out_of_range", test, "value", "date"
                 )
 
             df_oor_cov["rate"] = df_oor_cov[f"value"] * 1000
@@ -124,7 +124,7 @@ for frequency in ["monthly", "weekly"]:
 
                 demographic_df["rate"] = demographic_df[f"value"] * 1000
                 demographic_df = redact_small_numbers(
-                    demographic_df, 10, test, "population", "rate", "date"
+                    demographic_df, 5, test, "population", "rate", "date"
                 )
 
                 plot_measures(
