@@ -364,7 +364,7 @@ for test in ["alt", "ast", "bilirubin"]:
     )
 
     m_oor_ref = Measure(
-        id=f"{test}_oor_rate",
+        id=f"{test}_oor_ref_rate",
         numerator=f"{test}_numeric_value_out_of_ref_range",
         denominator=test,
         group_by="population",
@@ -395,7 +395,7 @@ for test in ["alt", "ast", "bilirubin"]:
             group_by="population",
         )
 
-        measures.extend([m, m_oor, m_oor_ref, m_oor_recent_cov])
+        measures.extend([m, m_oor, m_oor_recent_cov])
 
     else:
 

@@ -10,6 +10,9 @@ for frequency in ["monthly", "weekly"]:
             OUTPUT_DIR / f"{frequency}/measure_{test}_rate.csv", parse_dates=["date"]
         )
         df["rate"] = df[f"value"] * 1000
+        df = redact_small_numbers(
+                    df, 10, test, "population", "rate", "date"
+                )
 
         plot_measures(
             df=df,
@@ -40,11 +43,27 @@ for frequency in ["monthly", "weekly"]:
 
         # plot out of range rates
         if test in ["alt", "ast", "bilirubin"]:
-            df_oor = pd.read_csv(
-                OUTPUT_DIR / f"{frequency}/measure_{test}_oor_rate.csv",
-                parse_dates=["date"],
-            )
+
+            if test == "bilirubin":
+                df_oor = pd.read_csv(
+                    OUTPUT_DIR / f"{frequency}/measure_{test}_oor_ref_rate.csv",
+                    parse_dates=["date"],
+                )
+                df_oor = redact_small_numbers(
+                    df_oor, 10, f"{test}_numeric_value_out_of_ref_range", test, "value", "date"
+                )
+            else:
+                df_oor = pd.read_csv(
+                    OUTPUT_DIR / f"{frequency}/measure_{test}_oor_rate.csv",
+                    parse_dates=["date"],
+                )
+                df_oor = redact_small_numbers(
+                    df_oor, 10, f"{test}_numeric_value_out_of_range", test, "value", "date"
+                )
             df_oor["rate"] = df_oor[f"value"] * 1000
+            
+            
+            
 
             plot_measures(
                 df=df_oor,
@@ -57,14 +76,29 @@ for frequency in ["monthly", "weekly"]:
 
             # chart for those with recent test and out of range
 
+            
             df_oor_cov = pd.read_csv(
                 OUTPUT_DIR / f"{frequency}/measure_{test}_oor_recent_cov_rate.csv",
                 parse_dates=["date"],
             )
 
-            df_oor_cov["rate"] = df_oor_cov[f"value"] * 1000
-            convert_binary(df_oor_cov, "recent_positive_covid_test", "Yes", "No")
+            if test == "bilirubin":
+                
+                df_oor = redact_small_numbers(
+                    df_oor, 10, f"{test}_numeric_value_out_of_ref_range", test, "value", "date"
+                )
             
+            else:
+                df_oor = redact_small_numbers(
+                    df_oor, 10, f"{test}_numeric_value_out_of_range", test, "value", "date"
+                )
+
+            df_oor_cov["rate"] = df_oor_cov[f"value"] * 1000
+
+            convert_binary(df_oor_cov, "recent_positive_covid_test", "Yes", "No")
+
+            
+                        
             plot_measures(
                 df=df_oor_cov,
                 filename=f"{frequency}/plot_{test}_oor_recent_cov",
