@@ -199,6 +199,10 @@ for frequency in ["monthly", "weekly"]:
                     demographic_df, 5, test, "population", "rate", "date"
                 )
 
+                demographic_df.to_csv(
+                    OUTPUT_DIR / f"{frequency}/redacted/measure_{test}_{d}_rate.csv",index=False
+                )
+
                 plot_measures(
                     df=demographic_df,
                     filename=f"{frequency}/plot_{test}_{d}",
