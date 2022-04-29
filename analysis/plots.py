@@ -183,7 +183,7 @@ for frequency in ["monthly", "weekly"]:
 
             for d in ["age_band", "region"]:
                 demographic_df = pd.read_csv(
-                    OUTPUT_DIR / f"monthly/measure_{test}_{d}_rate.csv",
+                    OUTPUT_DIR / f"{frequency}/measure_{test}_{d}_rate.csv",
                     parse_dates=["date"],
                 )
                 if d == "age_band":
@@ -205,6 +205,18 @@ for frequency in ["monthly", "weekly"]:
                     column_to_plot="rate",
                     title="",
                     y_label="Rate per 1000",
+                    as_bar=False,
+                    category=d,
+                )
+
+                #count
+
+                plot_measures(
+                    df=demographic_df,
+                    filename=f"{frequency}/plot_{test}_{d}_count",
+                    column_to_plot=test,
+                    title="",
+                    y_label="Count",
                     as_bar=False,
                     category=d,
                 )
