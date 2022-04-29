@@ -29,6 +29,16 @@ for frequency in ["monthly", "weekly"]:
             as_bar=False,
         )
 
+        # plot count
+        plot_measures(
+            df=df,
+            filename=f"{frequency}/plot_{test}_count",
+            column_to_plot=test,
+            title="",
+            y_label="Count",
+            as_bar=False,
+        )
+
         # deciles chart
         df_practice = pd.read_csv(
             OUTPUT_DIR / f"{frequency}/measure_{test}_practice_rate.csv",
@@ -87,6 +97,27 @@ for frequency in ["monthly", "weekly"]:
                 as_bar=False,
             )
 
+            # plot counts
+            if test == "bilirubin":
+                plot_measures(
+                    df=df_oor,
+                    filename=f"{frequency}/plot_{test}_oor_count",
+                    column_to_plot=f"{test}_numeric_value_out_of_ref_range",
+                    title="",
+                    y_label="Count",
+                    as_bar=False,
+                )
+            
+            else:
+                plot_measures(
+                    df=df_oor,
+                    filename=f"{frequency}/plot_{test}_oor_count",
+                    column_to_plot=f"{test}_numeric_value_out_of_range",
+                    title="",
+                    y_label="Count",
+                    as_bar=False,
+                )
+
             # chart for those with recent test and out of range
 
             
@@ -125,6 +156,30 @@ for frequency in ["monthly", "weekly"]:
                 as_bar=False,
                 category="recent_positive_covid_test",
             )
+
+            # plot count
+            if test == "bilirubin":
+                plot_measures(
+                    df=df_oor_cov,
+                    filename=f"{frequency}/plot_{test}_oor_recent_cov_count",
+                    column_to_plot=f"{test}_numeric_value_out_of_ref_range",
+                    title="",
+                    y_label="Count",
+                    as_bar=False,
+                    category="recent_positive_covid_test",
+                )
+            
+            else:
+                plot_measures(
+                    df=df_oor_cov,
+                    filename=f"{frequency}/plot_{test}_oor_recent_cov_count",
+                    column_to_plot=f"{test}_numeric_value_out_of_range",
+                    title="",
+                    y_label="Count",
+                    as_bar=False,
+                    category="recent_positive_covid_test",
+                )
+
 
             for d in ["age_band", "region"]:
                 demographic_df = pd.read_csv(
