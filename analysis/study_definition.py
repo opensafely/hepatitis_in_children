@@ -353,6 +353,34 @@ measures = [
         numerator="gi_illness", 
         denominator="population",
         group_by="practice"
+        ),
+
+    Measure(
+            id=f"gi_illness_age_rate", 
+            numerator="gi_illness", 
+            denominator="population", 
+            group_by="age_band"
+        ),
+
+    Measure(
+        id=f"hepatitis_rate",
+        numerator="hepatitis",
+        denominator="population",
+        group_by="population",
+    ),
+
+    Measure(
+        id=f"hepatitis_practice_rate", 
+        numerator="hepatitis", 
+        denominator="population",
+        group_by="practice"
+        ),
+    
+    Measure(
+            id=f"hepatitis_age_rate", 
+            numerator="hepatitis", 
+            denominator="population", 
+            group_by="age_band"
         )
 ]
 
