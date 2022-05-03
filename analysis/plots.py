@@ -29,7 +29,7 @@ for frequency in ["monthly", "weekly"]:
         )
         plot_measures(
             df=df,
-            filename=f"{frequency}/plot_{test}",
+            filename=f"{frequency}/joined/plot_{test}",
             column_to_plot="rate",
             title="",
             y_label="Rate per 1000",
