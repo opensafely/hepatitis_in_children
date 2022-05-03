@@ -14,7 +14,7 @@ Path("output/monthly/joined/redacted").mkdir(parents=True, exist_ok=True)
 Path("output/weekly/joined/redacted").mkdir(parents=True, exist_ok=True)
 
 for frequency in ["monthly", "weekly"]:
-    for test in ["alt", "ast", "bilirubin", "gi_illness"]:
+    for test in ["alt", "ast", "bilirubin", "gi_illness", "hepatitis"]:
 
         # plot rates
         df = pd.read_csv(
@@ -52,7 +52,7 @@ for frequency in ["monthly", "weekly"]:
             parse_dates=["date"],
         )
         df_practice["rate"] = calculate_rate(df_practice, "value")
-        print(df_practice)
+        
         decile_chart = charts.deciles_chart(
             df_practice,
             period_column="date",
