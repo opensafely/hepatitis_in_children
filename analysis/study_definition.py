@@ -353,6 +353,20 @@ measures = [
         numerator="gi_illness", 
         denominator="population",
         group_by="practice"
+        ),
+
+    Measure(
+        id=f"hepatitis_rate",
+        numerator="hepatitis",
+        denominator="population",
+        group_by="population",
+    ),
+
+    Measure(
+        id=f"hepatitis_practice_rate", 
+        numerator="hepatitis", 
+        denominator="population",
+        group_by="practice"
         )
 ]
 
