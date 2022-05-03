@@ -355,6 +355,13 @@ measures = [
     ),
 
     Measure(
+            id=f"gi_illness_age_rate", 
+            numerator="gi_illness", 
+            denominator="population", 
+            group_by="age_band"
+        ),
+
+    Measure(
         id=f"hepatitis_rate",
         numerator="hepatitis",
         denominator="population",
@@ -366,6 +373,13 @@ measures = [
         numerator="hepatitis", 
         denominator="population",
         group_by="practice"
+        ),
+
+    Measure(
+            id=f"hepatitis_age_rate", 
+            numerator="hepatitis", 
+            denominator="population", 
+            group_by="age_band"
         )
 ]
 
