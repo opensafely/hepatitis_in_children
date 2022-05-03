@@ -138,3 +138,21 @@ def convert_binary(df, binary_column, positive, negative):
     replace_dict = {0: negative, 1: positive}
     df[binary_column] = df[binary_column].replace(replace_dict)
     return df
+
+def calculate_rate(df, value_col, rate_per=1000, round_rate=False):
+    """Calculates the number of events per 1,000 of the population.
+    This function operates on the given measure table in-place, adding
+    a `rate` column.
+    Args:
+        df: A measure table.
+        value_col: The name of the numerator column in the measure table.
+        population_col: The name of the denominator column in the measure table.
+        round: Bool indicating whether to round rate to 2dp.
+    """
+    if round_rate:
+        rate = round(df[value_col] * rate_per, 2)
+
+    else:
+        rate = df[value_col] * rate_per
+
+    return rate

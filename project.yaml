@@ -70,46 +70,57 @@ actions:
       highly_sensitive:
         cohort: output/monthly/joined/input_20*.csv.gz
 
+  join_cohorts_weekly:
+    run: >
+      cohort-joiner:v0.0.9
+        --lhs output/weekly/input_weekly_20*.csv.gz
+        --rhs output/input_dob.csv.gz
+        --output-dir output/weekly/joined
+    needs: [
+      generate_study_population_weekly_1,
+      generate_study_population_weekly_2,
+      generate_study_population_dob]
+    outputs:
+      highly_sensitive:
+        cohort: output/weekly/joined/input_weekly_20*.csv.gz
+
   get_age_months:
     run: >
       python:latest python analysis/get_age_months.py
-    needs: [join_cohorts_monthly, generate_study_population_dob]
+    needs: [join_cohorts_monthly, join_cohorts_weekly, generate_study_population_dob]
     outputs:
       highly_sensitive:
-        cohort: output/monthly/joined/input_2*.csv.gz
+        cohorts_monthly: output/monthly/joined/input_2*.csv.gz
+        cohorts_weekly: output/weekly/joined/input_weekly*.csv.gz
   
   generate_measures:
     run: cohortextractor:latest generate_measures 
       --study-definition study_definition
-      --output-dir=output/monthly
+      --output-dir=output/monthly/joined
     needs: [
-      generate_study_population_monthly_1,
-      generate_study_population_monthly_2,
-      generate_study_population_monthly_3,
-      generate_study_population_monthly_4,
-      generate_study_population_monthly_5,
+      get_age_months
       ]
     outputs:
       moderately_sensitive:
-        measure_csv: output/monthly/measure_*_rate.csv
+        measure_csv_monthly: output/monthly/joined/measure_*_rate.csv
 
   generate_measures_weekly:
     run: cohortextractor:latest generate_measures 
       --study-definition study_definition_weekly
-      --output-dir=output/weekly
-    needs: [generate_study_population_weekly_1, generate_study_population_weekly_2]
+      --output-dir=output/weekly/joined
+    needs: [get_age_months]
     outputs:
       moderately_sensitive:
-        measure_csv: output/weekly/measure_*_rate.csv
+        measure_csv: output/weekly/joined/measure_*_rate.csv
 
   generate_plots:
     run: python:latest python analysis/plots.py
     needs: [generate_measures, generate_measures_weekly]
     outputs:
       moderately_sensitive:
-        counts: output/*/plot_*.png
-        deciles_charts: output/*/deciles_chart_*.png
-        measure_csv: output/*/redacted/measure_*_rate.csv
+        counts: output/*/joined/plot_*.png
+        deciles_charts: output/*/joined/deciles_chart_*.png
+        measure_csv: output/*/joined/redacted/measure_*_rate.csv
 
   generate_notebook:
     run: jupyter:latest jupyter nbconvert /workspace/analysis/report.ipynb --execute --to html --template basic --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400 --no-input
