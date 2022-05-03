@@ -91,7 +91,7 @@ actions:
     outputs:
       highly_sensitive:
         cohorts_monthly: output/monthly/joined/input_2*.csv.gz
-        cohorts_weekly: output/weekly/joined/input_2*.csv.gz
+        cohorts_weekly: output/weekly/joined/input_weekly*.csv.gz
   
   generate_measures:
     run: cohortextractor:latest generate_measures 
