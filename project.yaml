@@ -118,7 +118,7 @@ actions:
     needs: [generate_measures, generate_measures_weekly]
     outputs:
       moderately_sensitive:
-        counts: output/*/plot_*.png
+        counts: output/*/joined/plot_*.png
         deciles_charts: output/*/joined/deciles_chart_*.png
         measure_csv: output/*/joined/redacted/measure_*_rate.csv
 
