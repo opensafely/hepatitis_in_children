@@ -2,6 +2,7 @@ from cohortextractor import StudyDefinition, patients, Measure
 from codelists import *
 
 
+
 study = StudyDefinition(
     index_date="2019-01-01",
     default_expectations={
