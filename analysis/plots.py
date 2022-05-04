@@ -151,14 +151,14 @@ for frequency in ["monthly", "weekly"]:
             )
             
            
-            for d in ["age_band", "region"]:
+            for d in ["age_band_months", "region"]:
                 demographic_df = pd.read_csv(
                     OUTPUT_DIR / f"{frequency}/joined/measure_{test}_{d}_rate.csv",
                     parse_dates=["date"],
                 )
-                if d == "age_band":
+                if d == "age_band_months":
                     demographic_df = demographic_df[
-                        demographic_df["age_band"] != "missing"
+                        demographic_df["age_band_months"] != "missing"
                     ]
 
                 elif d == "region":
