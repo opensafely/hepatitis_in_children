@@ -358,7 +358,7 @@ measures = [
             id=f"gi_illness_age_rate", 
             numerator="gi_illness", 
             denominator="population", 
-            group_by="age_band"
+            group_by="age_band_months"
         ),
 
     Measure(
@@ -379,7 +379,7 @@ measures = [
             id=f"hepatitis_age_rate", 
             numerator="hepatitis", 
             denominator="population", 
-            group_by="age_band"
+            group_by="age_band_months"
         )
 ]
 
@@ -429,7 +429,7 @@ for test in ["alt", "ast", "bilirubin"]:
 
         measures.extend([m, m_oor_ref, m_oor_recent_cov])
 
-    for d in ["age_band", "region", "practice"]:
+    for d in ["age_band_months", "region", "practice"]:
         m_d = Measure(
             id=f"{test}_{d}_rate", numerator=test, denominator="population", group_by=d
         )
