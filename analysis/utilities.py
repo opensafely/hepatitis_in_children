@@ -24,6 +24,22 @@ def get_date_input_file(file: str) -> str:
         date = result = re.search(r"input_(.*)\.csv.gz", file)
         return date.group(1)
 
+def match_input_files_weekly(file: str) -> bool:
+    """Checks if file name has format outputted by cohort extractor"""
+    pattern = r"^input_weekly_20\d\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])\.csv.gz"
+    return True if re.match(pattern, file) else False
+
+
+def get_date_input_file_weekly(file: str) -> str:
+    """Gets the date in format YYYY-MM-DD from input file name string"""
+    # check format
+    if not match_input_files_weekly(file):
+        raise Exception("Not valid input file format")
+
+    else:
+        date = result = re.search(r"input_weekly_(.*)\.csv.gz", file)
+        return date.group(1)
+
 def redact_small_numbers(df, n, numerator, denominator, rate_column, date_column):
     """
     Takes counts df as input and suppresses low numbers.  Sequentially redacts
