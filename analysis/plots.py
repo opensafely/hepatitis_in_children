@@ -157,6 +157,49 @@ for frequency in ["monthly", "weekly"]:
                 category="recent_positive_covid_test",
             )
 
+
+            # chart for those with out of range broken down by age band
+
+            df_oor_age = pd.read_csv(
+                OUTPUT_DIR
+                / f"{frequency}/joined/measure_{test}_oor_age_rate.csv",
+                parse_dates=["date"],
+            )
+
+            df_oor_age = redact_small_numbers(
+                df_oor_age, 5, numerator, test, "value", "date"
+            )
+
+            df_oor_age.to_csv(
+                OUTPUT_DIR
+                / f"{frequency}/joined/redacted/measure_{test}_oor_age_rate.csv",
+                index=False,
+            )
+
+            df_oor_age["rate"] = calculate_rate(df_oor_age, "value")
+
+    
+            plot_measures(
+                df=df_oor_age,
+                filename=f"{frequency}/joined/plot_{test}_oor_age",
+                column_to_plot="rate",
+                title="",
+                y_label="Rate per 1000",
+                as_bar=False,
+                category="age_band_months",
+            )
+
+            # plot count
+            plot_measures(
+                df=df_oor_age,
+                filename=f"{frequency}/joined/plot_{test}_oor_age_count",
+                column_to_plot=numerator,
+                title="",
+                y_label="Count",
+                as_bar=False,
+                category="age_band_months",
+            )
+
             for d in ["age_band_months", "region"]:
                 demographic_df = pd.read_csv(
                     OUTPUT_DIR / f"{frequency}/joined/measure_{test}_{d}_rate.csv",

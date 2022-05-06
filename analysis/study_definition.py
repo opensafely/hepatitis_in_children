@@ -404,10 +404,16 @@ for test in ["alt", "ast", "bilirubin"]:
         m_oor_recent_cov = Measure(
             id=f"{test}_oor_recent_cov_rate", numerator=f"{test}_numeric_value_out_of_range", denominator=test, group_by=["recent_positive_covid_test"]
         )
+        m_oor_age = Measure(
+            id=f"{test}_oor_age_rate", numerator=f"{test}_numeric_value_out_of_range", denominator=test, group_by=["age_band_months"]
+        )
         
     else:
         m_oor_recent_cov = Measure(
         id=f"{test}_oor_recent_cov_rate", numerator=f"{test}_numeric_value_out_of_ref_range", denominator=test, group_by=["recent_positive_covid_test"]
+    )
+        m_oor_age = Measure(
+        id=f"{test}_oor_age_rate", numerator=f"{test}_numeric_value_out_of_ref_range", denominator=test, group_by=["age_band_months"]
     )
 
     if test in ["alt", "ast"]:
@@ -419,11 +425,11 @@ for test in ["alt", "ast", "bilirubin"]:
             group_by="population",
         )
 
-        measures.extend([m, m_oor, m_oor_recent_cov])
+        measures.extend([m, m_oor, m_oor_recent_cov, m_oor_age])
 
     else:
 
-        measures.extend([m, m_oor_ref, m_oor_recent_cov])
+        measures.extend([m, m_oor_ref, m_oor_recent_cov, m_oor_age])
 
     for d in ["age_band_months", "region", "practice"]:
         m_d = Measure(
