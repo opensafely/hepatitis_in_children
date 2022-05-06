@@ -105,18 +105,22 @@ def plot_measures(
         category: Name of column indicating different categories
     """
     plt.figure(figsize=(15, 8))
+
+    #mask nan values (redacted)
+    mask = np.isfinite(df[column_to_plot])
+    
     if category:
         for unique_category in sorted(df[category].unique()):
 
             # subset on category column and sort by date
             df_subset = df[df[category] == unique_category].sort_values("date")
 
-            plt.plot(df_subset["date"], df_subset[column_to_plot])
+            plt.plot(df_subset["date"][mask], df_subset[column_to_plot][mask], marker='o')
     else:
         if as_bar:
             df.plot.bar("date", column_to_plot, legend=False)
         else:
-            plt.plot(df["date"], df[column_to_plot])
+            plt.plot(df["date"][mask], df[column_to_plot][mask], marker='o')
 
     x_labels = sorted(df["date"].unique())
     plt.ylabel(y_label)
@@ -172,3 +176,21 @@ def calculate_rate(df, value_col, rate_per=1000, round_rate=False):
         rate = df[value_col] * rate_per
 
     return rate
+
+def count_unique_practices(df):
+    return len(np.unique(df["practice"]))
+
+def drop_irrelevant_practices(df):
+    """Drops irrelevant practices from the given measure table.
+    An irrelevant practice has zero events during the study period.
+    Args:
+        df: A measure table.
+    Returns:
+        A copy of the given measure table with irrelevant practices dropped.
+        A summary of the number of practices included
+    """
+
+    is_relevant = df.groupby("practice").value.any()
+    df_relevant = df[df.practice.isin(is_relevant[is_relevant == True].index)]
+    practice_summary = {"num_practices": count_unique_practices(df), "num_practices_included": count_unique_practices(df_relevant)}
+    return df_relevant, practice_summary

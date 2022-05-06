@@ -353,34 +353,30 @@ measures = [
         denominator="population",
         group_by="practice",
     ),
-
     Measure(
-            id=f"gi_illness_age_rate", 
-            numerator="gi_illness", 
-            denominator="population", 
-            group_by="age_band_months"
-        ),
-
+        id=f"gi_illness_age_rate",
+        numerator="gi_illness",
+        denominator="population",
+        group_by="age_band_months",
+    ),
     Measure(
         id=f"hepatitis_rate",
         numerator="hepatitis",
         denominator="population",
         group_by="population",
     ),
-
     Measure(
-        id=f"hepatitis_practice_rate", 
-        numerator="hepatitis", 
+        id=f"hepatitis_practice_rate",
+        numerator="hepatitis",
         denominator="population",
-        group_by="practice"
-        ),
-
+        group_by="practice",
+    ),
     Measure(
-            id=f"hepatitis_age_rate", 
-            numerator="hepatitis", 
-            denominator="population", 
-            group_by="age_band_months"
-        )
+        id=f"hepatitis_age_rate",
+        numerator="hepatitis",
+        denominator="population",
+        group_by="age_band_months",
+    ),
 ]
 
 for test in ["alt", "ast", "bilirubin"]:
@@ -405,6 +401,12 @@ for test in ["alt", "ast", "bilirubin"]:
             denominator=test,
             group_by=["recent_positive_covid_test"],
         )
+        m_oor_age = Measure(
+            id=f"{test}_oor_age_rate",
+            numerator=f"{test}_numeric_value_out_of_range",
+            denominator=test,
+            group_by=["age_band_months"],
+        )
 
     else:
         m_oor_recent_cov = Measure(
@@ -412,6 +414,12 @@ for test in ["alt", "ast", "bilirubin"]:
             numerator=f"{test}_numeric_value_out_of_ref_range",
             denominator=test,
             group_by=["recent_positive_covid_test"],
+        )
+        m_oor_age = Measure(
+            id=f"{test}_oor_age_rate",
+            numerator=f"{test}_numeric_value_out_of_ref_range",
+            denominator=test,
+            group_by=["age_band_months"],
         )
 
     if test in ["alt", "ast"]:
@@ -423,11 +431,11 @@ for test in ["alt", "ast", "bilirubin"]:
             group_by="population",
         )
 
-        measures.extend([m, m_oor, m_oor_recent_cov])
+        measures.extend([m, m_oor, m_oor_recent_cov, m_oor_age])
 
     else:
 
-        measures.extend([m, m_oor_ref, m_oor_recent_cov])
+        measures.extend([m, m_oor_ref, m_oor_recent_cov, m_oor_age])
 
     for d in ["age_band_months", "region", "practice"]:
         m_d = Measure(
