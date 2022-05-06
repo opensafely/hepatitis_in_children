@@ -15,7 +15,12 @@ from utilities import (
 Path("output/monthly/joined/redacted").mkdir(parents=True, exist_ok=True)
 Path("output/weekly/joined/redacted").mkdir(parents=True, exist_ok=True)
 
+
+
 for frequency in ["monthly", "weekly"]:
+
+    mean_values = pd.read_csv(OUTPUT_DIR / f"{frequency}/joined/redacted/mean_test_value_by_age.csv")
+
     for test in ["alt", "ast", "bilirubin", "gi_illness", "hepatitis"]:
 
         # plot rates
@@ -75,6 +80,20 @@ for frequency in ["monthly", "weekly"]:
 
         # plot out of range rates
         if test in ["alt", "ast", "bilirubin"]:
+            
+            
+            #plot mean value
+
+            plot_measures(
+                df=mean_values,
+                filename=f"{frequency}/joined/plot_{test}_mean_value",
+                column_to_plot=f"{test}_numeric_value",
+                title="",
+                y_label="Mean test value",
+                as_bar=False,
+            )
+            
+            
             if test == "bilirubin":
                 input_file = f"{frequency}/joined/measure_{test}_oor_ref_rate.csv"
                 numerator = f"{test}_numeric_value_out_of_ref_range"
