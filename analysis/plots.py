@@ -78,6 +78,40 @@ for frequency in ["monthly", "weekly"]:
             bbox_inches="tight",
         )
 
+        # plot age band rates for hepatitis and gi illness
+
+        if test in ["hepatitis", "gi_illness"]:
+            df = pd.read_csv(
+                OUTPUT_DIR / f"{frequency}/joined/measure_{test}_age_rate.csv",
+                parse_dates=["date"],
+                )
+            df["rate"] = calculate_rate(df, "value")
+            df = redact_small_numbers(df, 5, test, "population", "rate", "date")
+            df.to_csv(
+                OUTPUT_DIR / f"{frequency}/joined/redacted/measure_{test}_age_rate.csv",
+                index=False,
+            )
+            plot_measures(
+                df=df,
+                filename=f"{frequency}/joined/plot_{test}_age",
+                column_to_plot="rate",
+                title="",
+                y_label="Rate per 1000",
+                as_bar=False,
+                category="age_band_months",
+            )
+
+            # plot count
+            plot_measures(
+                df=df,
+                filename=f"{frequency}/joined/plot_{test}_count_age",
+                column_to_plot=test,
+                title="",
+                y_label="Count",
+                as_bar=False,
+                category="age_band_months",
+            )
+
         # plot out of range rates
         if test in ["alt", "ast", "bilirubin"]:
             
