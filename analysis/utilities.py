@@ -172,3 +172,21 @@ def calculate_rate(df, value_col, rate_per=1000, round_rate=False):
         rate = df[value_col] * rate_per
 
     return rate
+
+def count_unique_practices(df):
+    return len(np.unique(df["practice"]))
+
+def drop_irrelevant_practices(df):
+    """Drops irrelevant practices from the given measure table.
+    An irrelevant practice has zero events during the study period.
+    Args:
+        df: A measure table.
+    Returns:
+        A copy of the given measure table with irrelevant practices dropped.
+        A summary of the number of practices included
+    """
+
+    is_relevant = df.groupby("practice").value.any()
+    df_relevant = df[df.practice.isin(is_relevant[is_relevant == True].index)]
+    practice_summary = {"num_practices": count_unique_practices(df), "num_practices_included": count_unique_practices(df_relevant)}
+    return df_relevant, practice_summary
