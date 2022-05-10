@@ -40,7 +40,7 @@ def get_date_input_file_weekly(file: str) -> str:
         date = result = re.search(r"input_weekly_(.*)\.csv.gz", file)
         return date.group(1)
 
-def redact_small_numbers(df, n, numerator, denominator, rate_column, date_column):
+def redact_small_numbers(df, n, numerator, denominator, rate_column, date_column, groupby_column):
     """
     Takes counts df as input and suppresses low numbers.  Sequentially redacts
     low numbers from numerator and denominator until count of redcted values >=n.
@@ -49,41 +49,59 @@ def redact_small_numbers(df, n, numerator, denominator, rate_column, date_column
     n: threshold for low number suppression
     numerator: numerator column to be redacted
     denominator: denominator column to be redacted
+    groupby_column: column measure is grouped by, if any
     """
 
     def suppress_column(column):
+       
+        suppressed_column = column[column > n]
         suppressed_count = column[column <= n].sum()
-
-        # if 0 dont need to suppress anything
-        if suppressed_count == 0:
+        
+        # if no values suppressed dont need to suppress anything
+        if len(suppressed_column) == len(column):
             pass
 
         else:
             column[column <= n] = np.nan
+            #if not all nan make sure enough redacted
+            if column.any():
+                while suppressed_count <= n:
+                    suppressed_count += column.min()
 
-            while suppressed_count <= n:
-                suppressed_count += column.min()
-
-                column[column.idxmin()] = np.nan
+                    column[column.idxmin()] = np.nan
+                    
+                    # if whole column redacted stop
+                    if not column.any():
+                        break
         return column
 
     df_list = []
 
     dates = df[date_column].unique()
-
+    
     for d in dates:
+        
         df_subset = df.loc[df[date_column] == d, :]
-
+        
         for column in [numerator, denominator]:
-            df_subset[column] = suppress_column(df_subset[column])
+            df_subset.loc[:, column] = suppress_column(df_subset.loc[:,column])
 
         df_subset.loc[
             (df_subset[numerator].isna()) | (df_subset[denominator].isna()), rate_column
         ] = np.nan
         df_list.append(df_subset)
 
-    return pd.concat(df_list, axis=0)
+    redacted_df = pd.concat(df_list, axis=0)
 
+    if groupby_column:
+        for column in [numerator, denominator]:
+            redacted_df = redacted_df.groupby(by=groupby_column)[[column]].transform(lambda x:suppress_column(x))
+
+    else:
+        for column in [numerator, denominator]:
+            redacted_df[column] = suppress_column(redacted_df[column])
+
+    return redacted_df
 
 def plot_measures(
     df,
