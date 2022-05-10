@@ -51,7 +51,7 @@ def redact_small_numbers(df, n, numerator, denominator, rate_column, date_column
     denominator: denominator column to be redacted
     groupby_column: column measure is grouped by, if any
     """
-
+    
     def suppress_column(column):
        
         suppressed_column = column[column > n]
@@ -95,10 +95,12 @@ def redact_small_numbers(df, n, numerator, denominator, rate_column, date_column
 
     if groupby_column:
         for column in [numerator, denominator]:
-            redacted_df = redacted_df.groupby(by=groupby_column)[[column]].transform(lambda x:suppress_column(x))
+            
+            redacted_df.groupby(by=groupby_column)[[column]].transform(lambda x:suppress_column(x))
 
     else:
         for column in [numerator, denominator]:
+            
             redacted_df[column] = suppress_column(redacted_df[column])
 
     return redacted_df
