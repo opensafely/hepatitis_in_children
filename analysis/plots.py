@@ -29,7 +29,7 @@ for frequency in ["monthly", "weekly"]:
             parse_dates=["date"],
         )
         df["rate"] = calculate_rate(df, "value")
-        df = redact_small_numbers(df, 5, test, "population", "rate", "date")
+        df = redact_small_numbers(df, 5, test, "population", "rate", "date", None)
         df.to_csv(
             OUTPUT_DIR / f"{frequency}/joined/redacted/measure_{test}_rate.csv",
             index=False,
@@ -86,7 +86,7 @@ for frequency in ["monthly", "weekly"]:
                 parse_dates=["date"],
                 )
             df["rate"] = calculate_rate(df, "value")
-            df = redact_small_numbers(df, 5, test, "population", "rate", "date")
+            df = redact_small_numbers(df, 5, test, "population", "rate", "date", "age_band_months")
             df.to_csv(
                 OUTPUT_DIR / f"{frequency}/joined/redacted/measure_{test}_age_rate.csv",
                 index=False,
@@ -125,6 +125,7 @@ for frequency in ["monthly", "weekly"]:
                 title="",
                 y_label="Mean test value",
                 as_bar=False,
+                category="age_band_months"
             )
             
             
@@ -141,13 +142,23 @@ for frequency in ["monthly", "weekly"]:
                 OUTPUT_DIR / input_file,
                 parse_dates=["date"],
             )
-            df_oor = redact_small_numbers(df_oor, 5, numerator, test, "value", "date")
+        
+            df_oor = redact_small_numbers(df_oor, 5, numerator, test, "value", "date", None)
             df_oor.to_csv(
                 OUTPUT_DIR / f"{frequency}/joined/redacted/{output_file}", index=False
             )
 
-            df_oor["rate"] = calculate_rate(df_oor, "value")
+            
 
+            # if ast plot quarterly numbers instead
+           
+            if test == "ast":
+                df_oor = df_oor.groupby(pd.PeriodIndex(df["date"], freq="q"), axis=0)[[numerator, test]].sum().reset_index()
+                df_oor["value"] = df_oor[numerator] / df_oor[test]
+                df_oor["date"] = df_oor["date"].astype(str)
+
+            df_oor["rate"] = calculate_rate(df_oor, "value") 
+            
             plot_measures(
                 df=df_oor,
                 filename=f"{frequency}/joined/plot_{test}_oor",
@@ -174,9 +185,9 @@ for frequency in ["monthly", "weekly"]:
                 / f"{frequency}/joined/measure_{test}_oor_recent_cov_rate.csv",
                 parse_dates=["date"],
             )
-
+            
             df_oor_cov = redact_small_numbers(
-                df_oor_cov, 5, numerator, test, "value", "date"
+                df_oor_cov, 5, numerator, test, "value", "date", "recent_positive_covid_test"
             )
 
             df_oor_cov.to_csv(
@@ -220,7 +231,7 @@ for frequency in ["monthly", "weekly"]:
             )
 
             df_oor_age = redact_small_numbers(
-                df_oor_age, 5, numerator, test, "value", "date"
+                df_oor_age, 5, numerator, test, "value", "date", "age_band_months"
             )
 
             df_oor_age.to_csv(
@@ -268,7 +279,7 @@ for frequency in ["monthly", "weekly"]:
 
                 demographic_df["rate"] = calculate_rate(demographic_df, "value")
                 demographic_df = redact_small_numbers(
-                    demographic_df, 5, test, "population", "rate", "date"
+                    demographic_df, 5, test, "population", "rate", "date", d
                 )
 
                 demographic_df.to_csv(

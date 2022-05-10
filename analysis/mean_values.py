@@ -35,9 +35,9 @@ mean_ages_months_concat = pd.concat(mean_ages_months)
 
 # redact any mean values where calculated from low n
 
-mean_ages_months_concat = redact_small_numbers(mean_ages_months_concat, 5, "alt_numeric_value_count", "population", "alt_numeric_value", "date")
-mean_ages_months_concat = redact_small_numbers(mean_ages_months_concat, 5, "ast_numeric_value_count", "population", "ast_numeric_value", "date")
-mean_ages_months_concat = redact_small_numbers(mean_ages_months_concat, 5, "bilirubin_numeric_value_count", "population", "bilirubin_numeric_value", "date")
+mean_ages_months_concat = redact_small_numbers(mean_ages_months_concat, 5, "alt_numeric_value_count", "population", "alt_numeric_value", "date", "age_band_months")
+mean_ages_months_concat = redact_small_numbers(mean_ages_months_concat, 5, "ast_numeric_value_count", "population", "ast_numeric_value", "date", "age_band_months")
+mean_ages_months_concat = redact_small_numbers(mean_ages_months_concat, 5, "bilirubin_numeric_value_count", "population", "bilirubin_numeric_value", "date", "age_band_months")
 
 mean_ages_months_concat.to_csv(OUTPUT_DIR / "monthly/joined/redacted/mean_test_value_by_age.csv")
 
@@ -65,8 +65,8 @@ mean_ages_weeks_concat = pd.concat(mean_ages_weeks)
 
 # redact any mean values where calculated from low n
 
-mean_ages_weeks_concat = redact_small_numbers(mean_ages_weeks_concat, 5, "alt_numeric_value_count", "population", "alt_numeric_value", "date")
-mean_ages_weeks_concat = redact_small_numbers(mean_ages_weeks_concat, 5, "ast_numeric_value_count", "population", "ast_numeric_value", "date")
-mean_ages_weeks_concat = redact_small_numbers(mean_ages_weeks_concat, 5, "bilirubin_numeric_value_count", "population", "bilirubin_numeric_value", "date")
+mean_ages_weeks_concat = redact_small_numbers(mean_ages_weeks_concat, 5, "alt_numeric_value_count", "population", "alt_numeric_value", "date", "age_band_months")
+mean_ages_weeks_concat = redact_small_numbers(mean_ages_weeks_concat, 5, "ast_numeric_value_count", "population", "ast_numeric_value", "date", "age_band_months")
+mean_ages_weeks_concat = redact_small_numbers(mean_ages_weeks_concat, 5, "bilirubin_numeric_value_count", "population", "bilirubin_numeric_value", "date", "age_band_months")
 
 mean_ages_weeks_concat.to_csv(OUTPUT_DIR / "weekly/joined/redacted/mean_test_value_by_age.csv")
