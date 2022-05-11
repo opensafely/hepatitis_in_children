@@ -37,9 +37,7 @@ for file in (OUTPUT_DIR / "monthly/joined").iterdir():
             age_by_group["date"] = date
             age_by_group["population"] = df.groupby("age_band_months").size()
 
-            age_by_group[f"{test}_numeric_value_count"] = df.groupby("age_band_months")[
-                [f"{test}_numeric_value"]
-            ].count()
+    
 
             mean_ages_months[test].append(age_by_group)
 
@@ -87,9 +85,7 @@ for file in (OUTPUT_DIR / "weekly/joined").iterdir():
             age_by_group["date"] = date
             age_by_group["population"] = df.groupby("age_band_months").size()
 
-            age_by_group[f"{test}_numeric_value_count"] = df.groupby("age_band_months")[
-                [f"{test}_numeric_value"]
-            ].count()
+            
 
             mean_ages_weeks[test].append(age_by_group)
 
