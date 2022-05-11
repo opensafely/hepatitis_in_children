@@ -15,6 +15,9 @@ Path("output/weekly/joined/redacted").mkdir(parents=True, exist_ok=True)
 
 mean_ages_months = {}
 
+for test in ["alt", "ast", "bilirubin"]:
+    mean_ages_months[test] = []
+
 for file in (OUTPUT_DIR / "monthly/joined").iterdir():
     if match_input_files(file.name):
         df = pd.read_csv(
@@ -23,7 +26,7 @@ for file in (OUTPUT_DIR / "monthly/joined").iterdir():
         date = get_date_input_file(file.name)
 
         for test in ["alt", "ast", "bilirubin"]:
-            mean_ages_months[test] = []
+
             # only want those who have had a test
             df_subset = df.loc[df[test] == 1, :]
 
@@ -39,6 +42,7 @@ for file in (OUTPUT_DIR / "monthly/joined").iterdir():
             ].count()
 
             mean_ages_months[test].append(age_by_group)
+
 
 for test in ["alt", "ast", "bilirubin"]:
     mean_ages_months_concat = pd.concat(mean_ages_months[test])
@@ -61,6 +65,8 @@ for test in ["alt", "ast", "bilirubin"]:
 
 
 mean_ages_weeks = {}
+for test in ["alt", "ast", "bilirubin"]:
+    mean_ages_weeks[test] = []
 
 for file in (OUTPUT_DIR / "weekly/joined").iterdir():
     if match_input_files_weekly(file.name):
@@ -71,7 +77,6 @@ for file in (OUTPUT_DIR / "weekly/joined").iterdir():
 
         for test in ["alt", "ast", "bilirubin"]:
 
-            mean_ages_weeks[test] = []
             # only want those who have had a test
             df_subset = df.loc[df[test] == 1, :]
 

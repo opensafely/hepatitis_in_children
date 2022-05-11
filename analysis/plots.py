@@ -20,10 +20,12 @@ Path("output/weekly/joined/redacted").mkdir(parents=True, exist_ok=True)
 for frequency in ["monthly", "weekly"]:
 
     for test in ["alt", "ast", "bilirubin", "gi_illness", "hepatitis"]:
-        mean_values = pd.read_csv(
-            OUTPUT_DIR
-            / f"{frequency}/joined/redacted/mean_test_value_{test}_by_age.csv"
-        )
+        
+        if test in ["alt", "ast", "bilirubin"]:
+            mean_values = pd.read_csv(
+                OUTPUT_DIR
+                / f"{frequency}/joined/redacted/mean_test_value_{test}_by_age.csv"
+            )
 
         # plot rates
         df = pd.read_csv(
