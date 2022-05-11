@@ -200,7 +200,7 @@ for frequency in ["monthly", "weekly"]:
                 lambda x: round_values(x, base=5)
             )
             df_oor[test] = df_oor[test].apply(lambda x: round_values(x, base=5))
-            df_oor["value"] = df_oor[test] / df_oor["population"]
+            df_oor["value"] = df_oor[numerator] / df_oor[test]
 
             df_oor.to_csv(
                 OUTPUT_DIR / f"{frequency}/joined/redacted/{output_file}", index=False
