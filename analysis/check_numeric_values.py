@@ -18,11 +18,11 @@ mean_ages_months = []
 
 for file in (OUTPUT_DIR / "monthly/joined").iterdir():
     if match_input_files(file.name):
-        if file.name == "input_2017-04-01.csv.gz"
-        df = pd.read_csv(
-            (OUTPUT_DIR / "monthly/joined") / file.name, parse_dates=["dob"]
-        )
-        date = get_date_input_file(file.name)
-        
-        plt.boxplot(df["alt_numeric_value"])
-        plt.savefig(OUTPUT_DIR/"alt_check.png")
+        if file.name == "input_2017-04-01.csv.gz":
+            df = pd.read_csv(
+                (OUTPUT_DIR / "monthly/joined") / file.name, parse_dates=["dob"]
+            )
+            date = get_date_input_file(file.name)
+            
+            plt.boxplot(df["alt_numeric_value"])
+            plt.savefig(OUTPUT_DIR/"alt_check.png")
