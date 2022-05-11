@@ -21,11 +21,12 @@ for frequency in ["monthly", "weekly"]:
 
     for test in ["alt", "ast", "bilirubin", "gi_illness", "hepatitis"]:
         
-        if test in ["alt", "ast", "bilirubin"]:
-            mean_values = pd.read_csv(
-                OUTPUT_DIR
-                / f"{frequency}/joined/redacted/mean_test_value_{test}_by_age.csv"
-            )
+        if frequency == "monthly":
+            if test in ["alt", "ast", "bilirubin"]:
+                mean_values = pd.read_csv(
+                    OUTPUT_DIR
+                    / f"{frequency}/joined/redacted/mean_test_value_{test}_by_age.csv"
+                )
 
         # plot rates
         df = pd.read_csv(
@@ -157,16 +158,16 @@ for frequency in ["monthly", "weekly"]:
         if test in ["alt", "ast", "bilirubin"]:
 
             # plot mean value
-
-            plot_measures(
-                df=mean_values,
-                filename=f"{frequency}/joined/plot_{test}_mean_value",
-                column_to_plot=f"{test}_numeric_value",
-                title="",
-                y_label="Mean test value",
-                as_bar=False,
-                category="age_band_months",
-            )
+            if frequency == "monthly":
+                plot_measures(
+                    df=mean_values,
+                    filename=f"{frequency}/joined/plot_{test}_mean_value",
+                    column_to_plot=f"{test}_numeric_value",
+                    title="",
+                    y_label="Mean test value",
+                    as_bar=False,
+                    category="age_band_months",
+                )
 
             if test == "bilirubin":
                 input_file = f"{frequency}/joined/measure_{test}_oor_ref_rate.csv"
