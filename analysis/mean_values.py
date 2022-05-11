@@ -56,7 +56,7 @@ for test in ["alt", "ast", "bilirubin"]:
     )
 
     mean_ages_months_concat.to_csv(
-        OUTPUT_DIR / "monthly/joined/redacted/mean_test_value_{test}_by_age.csv"
+        OUTPUT_DIR / f"monthly/joined/redacted/mean_test_value_{test}_by_age.csv"
     )
 
 
