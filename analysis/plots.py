@@ -19,11 +19,11 @@ Path("output/weekly/joined/redacted").mkdir(parents=True, exist_ok=True)
 
 for frequency in ["monthly", "weekly"]:
 
-    mean_values = pd.read_csv(
-        OUTPUT_DIR / f"{frequency}/joined/redacted/mean_test_value_by_age.csv"
-    )
-
     for test in ["alt", "ast", "bilirubin", "gi_illness", "hepatitis"]:
+        mean_values = pd.read_csv(
+            OUTPUT_DIR
+            / f"{frequency}/joined/redacted/mean_test_value_{test}_by_age.csv"
+        )
 
         # plot rates
         df = pd.read_csv(
@@ -284,7 +284,8 @@ for frequency in ["monthly", "weekly"]:
             # chart for those with out of range broken down by age band
 
             df_oor_age = pd.read_csv(
-                OUTPUT_DIR / f"{frequency}/joined/measure_{test}_oor_age_band_months_rate.csv",
+                OUTPUT_DIR
+                / f"{frequency}/joined/measure_{test}_oor_age_band_months_rate.csv",
                 parse_dates=["date"],
             )
 
