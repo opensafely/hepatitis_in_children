@@ -48,7 +48,7 @@ for test in ["alt", "ast", "bilirubin"]:
     mean_ages_months_concat = redact_small_numbers(
         mean_ages_months_concat,
         5,
-        f"{test}_numeric_value_count",
+        "population",
         "population",
         f"{test}_numeric_value",
         "date",
