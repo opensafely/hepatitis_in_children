@@ -354,7 +354,7 @@ measures = [
         group_by="practice",
     ),
     Measure(
-        id=f"gi_illness_age_rate",
+        id=f"gi_illness_age_band_months_rate",
         numerator="gi_illness",
         denominator="population",
         group_by="age_band_months",
@@ -372,7 +372,7 @@ measures = [
         group_by="practice",
     ),
     Measure(
-        id=f"hepatitis_age_rate",
+        id=f"hepatitis_age_band_months_rate",
         numerator="hepatitis",
         denominator="population",
         group_by="age_band_months",
@@ -402,7 +402,7 @@ for test in ["alt", "ast", "bilirubin"]:
             group_by=["recent_positive_covid_test"],
         )
         m_oor_age = Measure(
-            id=f"{test}_oor_age_rate",
+            id=f"{test}_oor_age_band_months_rate",
             numerator=f"{test}_numeric_value_out_of_range",
             denominator=test,
             group_by=["age_band_months"],
@@ -416,7 +416,7 @@ for test in ["alt", "ast", "bilirubin"]:
             group_by=["recent_positive_covid_test"],
         )
         m_oor_age = Measure(
-            id=f"{test}_oor_age_rate",
+            id=f"{test}_oor_age_band_months_rate",
             numerator=f"{test}_numeric_value_out_of_ref_range",
             denominator=test,
             group_by=["age_band_months"],

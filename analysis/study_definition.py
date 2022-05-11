@@ -357,7 +357,7 @@ measures = [
         ),
 
     Measure(
-            id=f"gi_illness_age_rate", 
+            id=f"gi_illness_age_band_months_rate", 
             numerator="gi_illness", 
             denominator="population", 
             group_by="age_band_months"
@@ -378,7 +378,7 @@ measures = [
         ),
     
     Measure(
-            id=f"hepatitis_age_rate", 
+            id=f"hepatitis_age_band_months_rate", 
             numerator="hepatitis", 
             denominator="population", 
             group_by="age_band_months"

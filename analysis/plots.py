@@ -10,6 +10,7 @@ from utilities import (
     convert_binary,
     calculate_rate,
     drop_irrelevant_practices,
+    round_values
 )
 
 Path("output/monthly/joined/redacted").mkdir(parents=True, exist_ok=True)
@@ -28,8 +29,18 @@ for frequency in ["monthly", "weekly"]:
             OUTPUT_DIR / f"{frequency}/joined/measure_{test}_rate.csv",
             parse_dates=["date"],
         )
+        
+        df = redact_small_numbers(df, 5, test, "population", "value", "date", None)
+        
+        
+
+        df[test] = df[test].apply(
+    lambda x: round_values(x, base=5))
+        
+        df["population"] = df["population"].apply(
+    lambda x: round_values(x, base=5))
+        df["value"] = df[test] / df["population"]
         df["rate"] = calculate_rate(df, "value")
-        df = redact_small_numbers(df, 5, test, "population", "rate", "date", None)
         df.to_csv(
             OUTPUT_DIR / f"{frequency}/joined/redacted/measure_{test}_rate.csv",
             index=False,
@@ -82,13 +93,24 @@ for frequency in ["monthly", "weekly"]:
 
         if test in ["hepatitis", "gi_illness"]:
             df = pd.read_csv(
-                OUTPUT_DIR / f"{frequency}/joined/measure_{test}_age_rate.csv",
+                OUTPUT_DIR / f"{frequency}/joined/measure_{test}_age_band_months_rate.csv",
                 parse_dates=["date"],
                 )
+            
+            df = redact_small_numbers(df, 5, test, "population", "value", "date", "age_band_months")
+            df[test] = df[test].apply(
+    lambda x: round_values(x, base=5))
+            df["population"] = df["population"].apply(
+    lambda x: round_values(x, base=5))
+            df["value"] = df[test] / df["population"]
+
             df["rate"] = calculate_rate(df, "value")
-            df = redact_small_numbers(df, 5, test, "population", "rate", "date", "age_band_months")
+
+            df['age_band_months_sorted'] = pd.Categorical(df['age_band_months'], ["0-3 months", "3 months - 5 years", "6-10", "11-20", "21-30"])
+            
+            dff = df.sort_values(by = ['date', 'age_band_months_sorted'], ascending = [True, True])
             df.to_csv(
-                OUTPUT_DIR / f"{frequency}/joined/redacted/measure_{test}_age_rate.csv",
+                OUTPUT_DIR / f"{frequency}/joined/redacted/measure_{test}_age_band_months_rate.csv",
                 index=False,
             )
             plot_measures(
@@ -144,6 +166,11 @@ for frequency in ["monthly", "weekly"]:
             )
         
             df_oor = redact_small_numbers(df_oor, 5, numerator, test, "value", "date", None)
+            df_oor[numerator] = df_oor[numerator].apply(
+    lambda x: round_values(x, base=5))
+            df_oor[test] = df_oor[test].apply(
+    lambda x: round_values(x, base=5))
+            df_oor["value"] = df_oor[test] / df_oor["population"]
             df_oor.to_csv(
                 OUTPUT_DIR / f"{frequency}/joined/redacted/{output_file}", index=False
             )
@@ -189,6 +216,11 @@ for frequency in ["monthly", "weekly"]:
             df_oor_cov = redact_small_numbers(
                 df_oor_cov, 5, numerator, test, "value", "date", "recent_positive_covid_test"
             )
+            df_oor_cov[numerator] = df_oor_cov[numerator].apply(
+    lambda x: round_values(x, base=5))
+            df_oor_cov[test] = df_oor_cov[test].apply(
+    lambda x: round_values(x, base=5))
+            df_oor_cov["value"] = df_oor_cov[numerator] / df_oor_cov[test]
 
             df_oor_cov.to_csv(
                 OUTPUT_DIR
@@ -233,6 +265,16 @@ for frequency in ["monthly", "weekly"]:
             df_oor_age = redact_small_numbers(
                 df_oor_age, 5, numerator, test, "value", "date", "age_band_months"
             )
+
+            df_oor_age[numerator] = df_oor_age[numerator].apply(
+    lambda x: round_values(x, base=5))
+            df_oor_age[test] = df_oor_age[test].apply(
+    lambda x: round_values(x, base=5))
+            df_oor_age["value"] = df_oor_age[numerator] / df_oor_age[test]
+
+            df_oor_age['age_band_months_sorted'] = pd.Categorical(df_oor_age['age_band_months'], ["0-3 months", "3 months - 5 years", "6-10", "11-20", "21-30"])
+            
+            df_oor_age = df_oor_age.sort_values(by = ['date', 'age_band_months_sorted'], ascending = [True, True])
 
             df_oor_age.to_csv(
                 OUTPUT_DIR
@@ -281,6 +323,12 @@ for frequency in ["monthly", "weekly"]:
                 demographic_df = redact_small_numbers(
                     demographic_df, 5, test, "population", "rate", "date", d
                 )
+
+                demographic_df[test] = demographic_df[test].apply(
+    lambda x: round_values(x, base=5))
+                demographic_df["population"] = demographic_df["population"].apply(
+    lambda x: round_values(x, base=5))
+                demographic_df["value"] = demographic_df[test] / demographic_df["population"]
 
                 demographic_df.to_csv(
                     OUTPUT_DIR
