@@ -284,7 +284,7 @@ for frequency in ["monthly", "weekly"]:
             # chart for those with out of range broken down by age band
 
             df_oor_age = pd.read_csv(
-                OUTPUT_DIR / f"{frequency}/joined/measure_{test}_oor_age_rate.csv",
+                OUTPUT_DIR / f"{frequency}/joined/measure_{test}_oor_age_band_months_rate.csv",
                 parse_dates=["date"],
             )
 
