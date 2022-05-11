@@ -97,6 +97,13 @@ for frequency in ["monthly", "weekly"]:
                 parse_dates=["date"],
                 )
             
+            # if alt, combine 0-3 months and 3 months-5 yrs
+
+            if ((frequency == "weekly") & (test == "alt")) | ((test=="ast")):
+                df.loc[df["age_band_months"].isin(["0-3 months", "3 months - 5 years"]), "age_band_months"]= "0-5"
+                df = df.groupby(by=["date", "age_band_months"])[[test, "population"]].sum()
+                df["value"] = df["test"] / df["population"]
+
             df = redact_small_numbers(df, 5, test, "population", "value", "date", "age_band_months")
             df[test] = df[test].apply(
     lambda x: round_values(x, base=5))
@@ -108,11 +115,14 @@ for frequency in ["monthly", "weekly"]:
 
             df['age_band_months_sorted'] = pd.Categorical(df['age_band_months'], ["0-3 months", "3 months - 5 years", "6-10", "11-20", "21-30"])
             
-            dff = df.sort_values(by = ['date', 'age_band_months_sorted'], ascending = [True, True])
+            df = df.sort_values(by = ['date', 'age_band_months_sorted'], ascending = [True, True])
             df.to_csv(
                 OUTPUT_DIR / f"{frequency}/joined/redacted/measure_{test}_age_band_months_rate.csv",
                 index=False,
             )
+
+            
+
             plot_measures(
                 df=df,
                 filename=f"{frequency}/joined/plot_{test}_age",
