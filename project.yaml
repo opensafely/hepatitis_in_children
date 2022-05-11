@@ -93,6 +93,14 @@ actions:
         cohorts_monthly: output/monthly/joined/input_2*.csv.gz
         cohorts_weekly: output/weekly/joined/input_weekly*.csv.gz
   
+  check_numeric_values:
+    run: >
+      python:latest python analysis/check_numeric_values.py
+    needs: [get_age_months]
+    outputs:
+      moderately_sensitive:
+        box: output/alt_check.png
+
   mean_values_by_age:
     run: >
       python:latest python analysis/mean_values.py
