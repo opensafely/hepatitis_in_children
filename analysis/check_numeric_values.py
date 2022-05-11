@@ -24,6 +24,6 @@ for file in (OUTPUT_DIR / "monthly/joined").iterdir():
             )
             date = get_date_input_file(file.name)
             
-            df = df.iloc[df["alt_numeric_value"]<1000,:]
+            df = df.loc[df["alt_numeric_value"]<1000,:]
             plt.boxplot(df["alt_numeric_value"], showfliers=False)
             plt.savefig(OUTPUT_DIR/"alt_check.png")
