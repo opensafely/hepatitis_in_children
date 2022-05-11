@@ -214,3 +214,10 @@ def drop_irrelevant_practices(df):
     df_relevant = df[df.practice.isin(is_relevant[is_relevant == True].index)]
     practice_summary = {"num_practices": count_unique_practices(df), "num_practices_included": count_unique_practices(df_relevant)}
     return df_relevant, practice_summary
+
+def round_values(x, base=5):
+    if not np.isnan(x):
+        rounded = int(base * round(x/base))
+    else:
+        rounded = np.nan
+    return  rounded
