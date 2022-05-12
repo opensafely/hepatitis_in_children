@@ -20,7 +20,7 @@ Path("output/weekly/joined/redacted").mkdir(parents=True, exist_ok=True)
 for frequency in ["monthly", "weekly"]:
 
     for test in ["alt", "ast", "bilirubin", "gi_illness", "hepatitis"]:
-        
+
         if frequency == "monthly":
             if test in ["alt", "ast", "bilirubin"]:
                 mean_values = pd.read_csv(
@@ -97,18 +97,6 @@ for frequency in ["monthly", "weekly"]:
                 / f"{frequency}/joined/measure_{test}_age_band_months_rate.csv",
                 parse_dates=["date"],
             )
-
-            # if alt, combine 0-3 months and 3 months-5 yrs
-
-            if ((frequency == "weekly") & (test == "alt")) | ((test == "ast")):
-                df.loc[
-                    df["age_band_months"].isin(["0-3 months", "3 months - 5 years"]),
-                    "age_band_months",
-                ] = "0-5"
-                df = df.groupby(by=["date", "age_band_months"])[
-                    [test, "population"]
-                ].sum()
-                df["value"] = df["test"] / df["population"]
 
             df = redact_small_numbers(
                 df, 5, test, "population", "value", "date", "age_band_months"
@@ -352,6 +340,23 @@ for frequency in ["monthly", "weekly"]:
 
                 elif d == "region":
                     demographic_df = demographic_df[demographic_df["region"].notnull()]
+
+                # if alt, combine 0-3 months and 3 months-5 yrs
+
+                if (d == "age_band_months") & (((frequency == "weekly") & (test == "alt")) | ((test == "ast"))):
+                    demographic_df.loc[
+                        demographic_df["age_band_months"].isin(
+                            ["0-3 months", "3 months - 5 years"]
+                        ),
+                        "age_band_months",
+                    ] = "0-5"
+                    demographic_df = demographic_df.groupby(
+                        by=["date", "age_band_months"]
+                    )[[test, "population"]].sum().reset_index()
+                    
+                    demographic_df["value"] = (
+                        demographic_df[test] / demographic_df["population"]
+                    )
 
                 demographic_df["rate"] = calculate_rate(demographic_df, "value")
                 demographic_df = redact_small_numbers(
