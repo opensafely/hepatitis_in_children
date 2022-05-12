@@ -35,8 +35,8 @@ for file in (OUTPUT_DIR / "monthly/joined").iterdir():
             ].mean()
 
             age_by_group["date"] = date
-            age_by_group["population"] = df.groupby("age_band_months").size()
-
+            age_by_group["population"] = df_subset.groupby("age_band_months").size()
+            age_by_group = age_by_group.reset_index()
             mean_ages_months[test].append(age_by_group)
 
 
@@ -47,7 +47,7 @@ for test in ["alt", "ast", "bilirubin"]:
     mean_ages_months_concat.to_csv(
         OUTPUT_DIR / f"monthly/joined/mean_test_value_{test}_by_age.csv"
     )
-
+ 
     if test == "ast":
                     mean_ages_months_concat.loc[
                         mean_ages_months_concat["age_band_months"].isin(
