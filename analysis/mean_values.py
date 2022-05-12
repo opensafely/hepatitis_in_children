@@ -48,16 +48,17 @@ for test in ["alt", "ast", "bilirubin"]:
         OUTPUT_DIR / f"monthly/joined/mean_test_value_{test}_by_age.csv"
     )
 
-    mean_ages_months_concat = redact_small_numbers(
-        mean_ages_months_concat,
-        5,
-        "population",
-        "population",
-        f"{test}_numeric_value",
-        "date",
-        "age_band_months",
-    )
+    if test == "ast":
+                    mean_ages_months_concat.loc[
+                        mean_ages_months_concat["age_band_months"].isin(
+                            ["0-3 months", "3 months - 5 years"]
+                        ),
+                        "age_band_months",
+                    ] = "0-5"
+                    mean_ages_months_concat = mean_ages_months_concat.groupby(
+                        by=["date", "age_band_months"]
+                    )[[f"{}_numeric_value"]].mean().reset_index()
+                    
+                    
 
-    mean_ages_months_concat.to_csv(
-        OUTPUT_DIR / f"monthly/joined/redacted/mean_test_value_{test}_by_age.csv"
-    )
+  

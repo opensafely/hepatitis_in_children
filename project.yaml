@@ -120,7 +120,6 @@ actions:
     outputs:
       moderately_sensitive:
         monthly: output/monthly/joined/mean_test_value_*_by_age.csv
-        monthly_redacted: output/monthly/joined/redacted/mean_test_value_*_by_age.csv
 
   generate_measures:
     run: cohortextractor:latest generate_measures 
