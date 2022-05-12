@@ -29,15 +29,17 @@ for frequency in ["monthly", "weekly"]:
                     / f"{frequency}/joined/mean_test_value_{test}_by_age.csv"
                 )
             
-                mean_values["age_band_months_sorted"] = pd.Categorical(
-                    mean_values["age_band_months"],
-                    ["0-3 months", "3 months - 5 years", "6-10", "11-20", "21-30"],
-                )
-
-                mean_values = mean_values.sort_values(
-                    by=["date", "age_band_months_sorted"], ascending=[True, True]
-                )
                 
+                if test == "ast":
+                    mean_values.loc[
+                        mean_values["age_band_months"].isin(
+                            ["0-3 months", "3 months - 5 years"]
+                        ),
+                        "age_band_months",
+                    ] = "0-5"
+                    mean_values = mean_values.groupby(
+                        by=["date", "age_band_months"]
+                    )[[f"{test}_numeric_value"]].mean().reset_index()
 
         # plot rates
         df = pd.read_csv(
@@ -167,7 +169,7 @@ for frequency in ["monthly", "weekly"]:
                     title="",
                     y_label="Mean test value",
                     as_bar=False,
-                    category="age_band_months_sorted",
+                    category="age_band_months",
                 )
 
             if test == "bilirubin":
