@@ -125,12 +125,13 @@ def plot_measures(
         category: Name of column indicating different categories
     """
     plt.figure(figsize=(15, 8))
-    df = df.sort_values(by="date")
+    
 
     #mask nan values (redacted)
     mask = np.isfinite(df[column_to_plot])
     
     if category:
+        df = df[df[category].notnull()]
         for unique_category in sorted(df[category].unique()):
 
             # subset on category column and sort by date

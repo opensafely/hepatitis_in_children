@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import json
 from pathlib import Path
 from ebmdatalab import charts
@@ -27,6 +28,16 @@ for frequency in ["monthly", "weekly"]:
                     OUTPUT_DIR
                     / f"{frequency}/joined/redacted/mean_test_value_{test}_by_age.csv"
                 )
+            
+                mean_values["age_band_months_sorted"] = pd.Categorical(
+                    mean_values["age_band_months"],
+                    ["0-3 months", "3 months - 5 years", "6-10", "11-20", "21-30"],
+                )
+
+                mean_values = mean_values.sort_values(
+                    by=["date", "age_band_months_sorted"], ascending=[True, True]
+                )
+                
 
         # plot rates
         df = pd.read_csv(
@@ -121,6 +132,7 @@ for frequency in ["monthly", "weekly"]:
                 index=False,
             )
 
+           
             plot_measures(
                 df=df,
                 filename=f"{frequency}/joined/plot_{test}_age",
@@ -128,7 +140,7 @@ for frequency in ["monthly", "weekly"]:
                 title="",
                 y_label="Rate per 1000",
                 as_bar=False,
-                category="age_band_months",
+                category="age_band_months_sorted",
             )
 
             # plot count
@@ -139,7 +151,7 @@ for frequency in ["monthly", "weekly"]:
                 title="",
                 y_label="Count",
                 as_bar=False,
-                category="age_band_months",
+                category="age_band_months_sorted",
             )
 
         # plot out of range rates
@@ -147,14 +159,15 @@ for frequency in ["monthly", "weekly"]:
 
             # plot mean value
             if frequency == "monthly":
-                plot_measures(
+               
+               plot_measures(
                     df=mean_values,
                     filename=f"{frequency}/joined/plot_{test}_mean_value",
                     column_to_plot=f"{test}_numeric_value",
                     title="",
                     y_label="Mean test value",
                     as_bar=False,
-                    category="age_band_months",
+                    category="age_band_months_sorted",
                 )
 
             if test == "bilirubin":
@@ -314,7 +327,7 @@ for frequency in ["monthly", "weekly"]:
                 title="",
                 y_label="Rate per 1000",
                 as_bar=False,
-                category="age_band_months",
+                category="age_band_months_sorted",
             )
 
             # plot count
@@ -325,7 +338,7 @@ for frequency in ["monthly", "weekly"]:
                 title="",
                 y_label="Count",
                 as_bar=False,
-                category="age_band_months",
+                category="age_band_months_sorted",
             )
 
             for d in ["age_band_months", "region"]:
