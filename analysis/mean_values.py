@@ -44,6 +44,9 @@ for test in ["alt", "ast", "bilirubin"]:
     mean_ages_months_concat = pd.concat(mean_ages_months[test])
 
     # redact any mean values where calculated from low n
+    mean_ages_months_concat.to_csv(
+        OUTPUT_DIR / f"monthly/joined/mean_test_value_{test}_by_age.csv"
+    )
 
     mean_ages_months_concat = redact_small_numbers(
         mean_ages_months_concat,
