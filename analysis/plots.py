@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import json
 from pathlib import Path
 from ebmdatalab import charts
@@ -20,13 +21,23 @@ Path("output/weekly/joined/redacted").mkdir(parents=True, exist_ok=True)
 for frequency in ["monthly", "weekly"]:
 
     for test in ["alt", "ast", "bilirubin", "gi_illness", "hepatitis"]:
-        
+
         if frequency == "monthly":
             if test in ["alt", "ast", "bilirubin"]:
                 mean_values = pd.read_csv(
                     OUTPUT_DIR
                     / f"{frequency}/joined/redacted/mean_test_value_{test}_by_age.csv"
                 )
+            
+                mean_values["age_band_months_sorted"] = pd.Categorical(
+                    mean_values["age_band_months"],
+                    ["0-3 months", "3 months - 5 years", "6-10", "11-20", "21-30"],
+                )
+
+                mean_values = mean_values.sort_values(
+                    by=["date", "age_band_months_sorted"], ascending=[True, True]
+                )
+                
 
         # plot rates
         df = pd.read_csv(
@@ -98,18 +109,6 @@ for frequency in ["monthly", "weekly"]:
                 parse_dates=["date"],
             )
 
-            # if alt, combine 0-3 months and 3 months-5 yrs
-
-            if ((frequency == "weekly") & (test == "alt")) | ((test == "ast")):
-                df.loc[
-                    df["age_band_months"].isin(["0-3 months", "3 months - 5 years"]),
-                    "age_band_months",
-                ] = "0-5"
-                df = df.groupby(by=["date", "age_band_months"])[
-                    [test, "population"]
-                ].sum()
-                df["value"] = df["test"] / df["population"]
-
             df = redact_small_numbers(
                 df, 5, test, "population", "value", "date", "age_band_months"
             )
@@ -133,6 +132,7 @@ for frequency in ["monthly", "weekly"]:
                 index=False,
             )
 
+           
             plot_measures(
                 df=df,
                 filename=f"{frequency}/joined/plot_{test}_age",
@@ -140,7 +140,7 @@ for frequency in ["monthly", "weekly"]:
                 title="",
                 y_label="Rate per 1000",
                 as_bar=False,
-                category="age_band_months",
+                category="age_band_months_sorted",
             )
 
             # plot count
@@ -151,7 +151,7 @@ for frequency in ["monthly", "weekly"]:
                 title="",
                 y_label="Count",
                 as_bar=False,
-                category="age_band_months",
+                category="age_band_months_sorted",
             )
 
         # plot out of range rates
@@ -159,14 +159,15 @@ for frequency in ["monthly", "weekly"]:
 
             # plot mean value
             if frequency == "monthly":
-                plot_measures(
+               
+               plot_measures(
                     df=mean_values,
                     filename=f"{frequency}/joined/plot_{test}_mean_value",
                     column_to_plot=f"{test}_numeric_value",
                     title="",
                     y_label="Mean test value",
                     as_bar=False,
-                    category="age_band_months",
+                    category="age_band_months_sorted",
                 )
 
             if test == "bilirubin":
@@ -326,7 +327,7 @@ for frequency in ["monthly", "weekly"]:
                 title="",
                 y_label="Rate per 1000",
                 as_bar=False,
-                category="age_band_months",
+                category="age_band_months_sorted",
             )
 
             # plot count
@@ -337,7 +338,7 @@ for frequency in ["monthly", "weekly"]:
                 title="",
                 y_label="Count",
                 as_bar=False,
-                category="age_band_months",
+                category="age_band_months_sorted",
             )
 
             for d in ["age_band_months", "region"]:
@@ -352,6 +353,23 @@ for frequency in ["monthly", "weekly"]:
 
                 elif d == "region":
                     demographic_df = demographic_df[demographic_df["region"].notnull()]
+
+                # if alt, combine 0-3 months and 3 months-5 yrs
+
+                if (d == "age_band_months") & (((frequency == "weekly") & (test == "alt")) | ((test == "ast"))):
+                    demographic_df.loc[
+                        demographic_df["age_band_months"].isin(
+                            ["0-3 months", "3 months - 5 years"]
+                        ),
+                        "age_band_months",
+                    ] = "0-5"
+                    demographic_df = demographic_df.groupby(
+                        by=["date", "age_band_months"]
+                    )[[test, "population"]].sum().reset_index()
+                    
+                    demographic_df["value"] = (
+                        demographic_df[test] / demographic_df["population"]
+                    )
 
                 demographic_df["rate"] = calculate_rate(demographic_df, "value")
                 demographic_df = redact_small_numbers(
