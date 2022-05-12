@@ -26,7 +26,7 @@ for frequency in ["monthly", "weekly"]:
             if test in ["alt", "ast", "bilirubin"]:
                 mean_values = pd.read_csv(
                     OUTPUT_DIR
-                    / f"{frequency}/joined/redacted/mean_test_value_{test}_by_age.csv"
+                    / f"{frequency}/joined/mean_test_value_{test}_by_age.csv"
                 )
             
                 mean_values["age_band_months_sorted"] = pd.Categorical(
