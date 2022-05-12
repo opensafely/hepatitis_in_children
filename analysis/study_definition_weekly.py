@@ -133,6 +133,8 @@ study = StudyDefinition(
         between=["index_date", "index_date + 6 days"],
         returning="numeric_value",
         find_last_match_in_period=True,
+        include_date_of_match=True, 
+        date_format="YYYY-MM-DD",
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
             "incidence": 0.5,
@@ -212,6 +214,8 @@ study = StudyDefinition(
         between=["index_date", "index_date + 6 days"],
         returning="numeric_value",
         find_last_match_in_period=True,
+        include_date_of_match=True, 
+        date_format="YYYY-MM-DD",
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
             "incidence": 0.5,
@@ -291,6 +295,8 @@ study = StudyDefinition(
         between=["index_date", "index_date + 6 days"],
         returning="numeric_value",
         find_last_match_in_period=True,
+        include_date_of_match=True, 
+        date_format="YYYY-MM-DD",
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
             "incidence": 0.5,
