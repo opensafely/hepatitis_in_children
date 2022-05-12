@@ -17,10 +17,10 @@ mean_ages_months = {}
 
 rows = []
 
-for file in (OUTPUT_DIR / "monthly/joined").iterdir():
+for file in (OUTPUT_DIR / "weekly/joined").iterdir():
     if match_input_files(file.name):
         df = pd.read_csv(
-            (OUTPUT_DIR / "monthly/joined") / file.name, parse_dates=["dob"]
+            (OUTPUT_DIR / "weekly/joined") / file.name, parse_dates=["dob"]
         )
         date = get_date_input_file(file.name)
         
@@ -53,6 +53,6 @@ for file in (OUTPUT_DIR / "monthly/joined").iterdir():
                 rows.append(new_row)
 
 df_summary = pd.DataFrame(rows)
-df_summary.to_csv(OUTPUT_DIR / "monthly/joined/isaric/input.csv.gz")
+df_summary.to_csv(OUTPUT_DIR / "weekly/joined/isaric/input.csv.gz")
 
                 

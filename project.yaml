@@ -118,17 +118,17 @@ actions:
     needs: [get_age_months]
     outputs:
       highly_sensitive:
-        monthly: output/monthly/joined/isaric/input.csv.gz
+        monthly: output/weekly/joined/isaric/input.csv.gz
 
   isaric_process:
     run: >
       python:latest python analysis/isaric_process_data.py
-      --filename output/monthly/joined/isaric/input.csv.gz
-      --output_filename output/summary_table.csv
+      --filename output/weekly/joined/isaric/input.csv.gz
+      --output_filename output/weekly/joined/isaric/summary_table.csv
     needs: [isaric_preprocess]
     outputs:
       moderately_sensitive:
-        monthly: output/summary_table.csv
+        monthly: output/weekly/joined/isaric/summary_table.csv
 
   mean_values_by_age:
     run: >
