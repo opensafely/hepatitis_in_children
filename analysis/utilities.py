@@ -126,7 +126,7 @@ def plot_measures(
     """
     plt.figure(figsize=(15, 8))
     
-
+    df = df.sort_values(by="date")
     #mask nan values (redacted)
     mask = np.isfinite(df[column_to_plot])
     
