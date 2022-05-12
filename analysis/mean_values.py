@@ -57,7 +57,7 @@ for test in ["alt", "ast", "bilirubin"]:
                     ] = "0-5"
                     mean_ages_months_concat = mean_ages_months_concat.groupby(
                         by=["date", "age_band_months"]
-                    )[[f"{}_numeric_value"]].mean().reset_index()
+                    )[[f"{test}_numeric_value"]].mean().reset_index()
                     
                     
 
