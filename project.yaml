@@ -112,13 +112,6 @@ actions:
         cohorts_monthly: output/monthly/joined/input_2*.csv.gz
         cohorts_weekly: output/weekly/joined/input_weekly*.csv.gz
   
-  check_numeric_values:
-    run: >
-      python:latest python analysis/check_numeric_values.py
-    needs: [get_age_months]
-    outputs:
-      moderately_sensitive:
-        box: output/alt_check.png
 
   mean_values_by_age:
     run: >
@@ -126,7 +119,8 @@ actions:
     needs: [get_age_months]
     outputs:
       moderately_sensitive:
-        monthly: output/monthly/joined/redacted/mean_test_value_*_by_age.csv
+        monthly: output/monthly/joined/mean_test_value_*_by_age.csv
+        monthly_redacted: output/monthly/joined/redacted/mean_test_value_*_by_age.csv
 
   generate_measures:
     run: cohortextractor:latest generate_measures 
@@ -141,6 +135,7 @@ actions:
 
   generate_measures_weekly:
     run: cohortextractor:latest generate_measures 
+      --skip-existing
       --study-definition study_definition_weekly
       --output-dir=output/weekly/joined
     needs: [get_age_months]
