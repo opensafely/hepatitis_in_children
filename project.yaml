@@ -51,7 +51,7 @@ actions:
     run: cohortextractor:latest generate_cohort --study-definition study_definition_weekly --index-date-range "2022-04-21 to 2022-05-05 by week" --output-dir=output/weekly --output-format csv.gz
     outputs:
       highly_sensitive:
-        cohort: output/weekly/input*.csv.gz
+        cohort: output/weekly/inpu*.csv.gz
 
   generate_study_population_dob:
     run: cohortextractor:latest generate_cohort --study-definition study_definition_dob --output-dir=output --output-format csv.gz
