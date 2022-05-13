@@ -85,23 +85,11 @@ actions:
     needs: [
       generate_study_population_weekly_1,
       generate_study_population_weekly_2,
+      generate_study_population_weekly_3
       generate_study_population_dob]
     outputs:
       highly_sensitive:
         cohort: output/weekly/joined/input_weekly_20*.csv.gz
-
-  join_cohorts_weekly_2:
-    run: >
-      cohort-joiner:v0.0.9
-        --lhs output/weekly/input_weekly_2022-04*.csv.gz
-        --rhs output/input_dob.csv.gz
-        --output-dir output/weekly/joined
-    needs: [
-      generate_study_population_weekly_3,
-      generate_study_population_dob]
-    outputs:
-      highly_sensitive:
-        cohort: output/weekly/joined/input_weekly_2022*.csv.gz
 
   get_age_months:
     run: >
