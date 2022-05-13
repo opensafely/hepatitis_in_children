@@ -85,7 +85,7 @@ actions:
     needs: [
       generate_study_population_weekly_1,
       generate_study_population_weekly_2,
-      generate_study_population_weekly_3
+      generate_study_population_weekly_3,
       generate_study_population_dob]
     outputs:
       highly_sensitive:
