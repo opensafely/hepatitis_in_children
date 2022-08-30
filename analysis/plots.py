@@ -25,11 +25,9 @@ for frequency in ["monthly", "weekly"]:
         if frequency == "monthly":
             if test in ["alt", "ast", "bilirubin"]:
                 mean_values = pd.read_csv(
-                    OUTPUT_DIR
-                    / f"{frequency}/joined/mean_test_value_{test}_by_age.csv"
+                    OUTPUT_DIR / f"{frequency}/joined/mean_test_value_{test}_by_age.csv"
                 )
-            
-                
+
                 if test == "ast":
                     mean_values.loc[
                         mean_values["age_band_months"].isin(
@@ -37,9 +35,13 @@ for frequency in ["monthly", "weekly"]:
                         ),
                         "age_band_months",
                     ] = "0-5"
-                    mean_values = mean_values.groupby(
-                        by=["date", "age_band_months"]
-                    )[[f"{test}_numeric_value"]].mean().reset_index()
+                    mean_values = (
+                        mean_values.groupby(by=["date", "age_band_months"])[
+                            [f"{test}_numeric_value"]
+                        ]
+                        .mean()
+                        .reset_index()
+                    )
 
         # plot rates
         df = pd.read_csv(
@@ -54,6 +56,7 @@ for frequency in ["monthly", "weekly"]:
         df["population"] = df["population"].apply(lambda x: round_values(x, base=5))
         df["value"] = df[test] / df["population"]
         df["rate"] = calculate_rate(df, "value")
+
         df.to_csv(
             OUTPUT_DIR / f"{frequency}/joined/redacted/measure_{test}_rate.csv",
             index=False,
@@ -134,7 +137,6 @@ for frequency in ["monthly", "weekly"]:
                 index=False,
             )
 
-           
             plot_measures(
                 df=df,
                 filename=f"{frequency}/joined/plot_{test}_age",
@@ -161,8 +163,8 @@ for frequency in ["monthly", "weekly"]:
 
             # plot mean value
             if frequency == "monthly":
-               
-               plot_measures(
+
+                plot_measures(
                     df=mean_values,
                     filename=f"{frequency}/joined/plot_{test}_mean_value",
                     column_to_plot=f"{test}_numeric_value",
@@ -174,11 +176,11 @@ for frequency in ["monthly", "weekly"]:
 
             if test == "bilirubin":
                 input_file = f"{frequency}/joined/measure_{test}_oor_ref_rate.csv"
-                numerator = f"{test}_numeric_value_out_of_ref_range"
+                numerator = "value"
                 output_file = f"measure_{test}_oor_ref_rate.csv"
             else:
                 input_file = f"{frequency}/joined/measure_{test}_oor_rate.csv"
-                numerator = f"{test}_numeric_value_out_of_range"
+                numerator = "value"
                 output_file = f"measure_{test}_oor_rate.csv"
 
             df_oor = pd.read_csv(
@@ -358,17 +360,23 @@ for frequency in ["monthly", "weekly"]:
 
                 # if alt, combine 0-3 months and 3 months-5 yrs
 
-                if (d == "age_band_months") & (((frequency == "weekly") & (test == "alt")) | ((test == "ast"))):
+                if (d == "age_band_months") & (
+                    ((frequency == "weekly") & (test == "alt")) | ((test == "ast"))
+                ):
                     demographic_df.loc[
                         demographic_df["age_band_months"].isin(
                             ["0-3 months", "3 months - 5 years"]
                         ),
                         "age_band_months",
                     ] = "0-5"
-                    demographic_df = demographic_df.groupby(
-                        by=["date", "age_band_months"]
-                    )[[test, "population"]].sum().reset_index()
-                    
+                    demographic_df = (
+                        demographic_df.groupby(by=["date", "age_band_months"])[
+                            [test, "population"]
+                        ]
+                        .sum()
+                        .reset_index()
+                    )
+
                     demographic_df["value"] = (
                         demographic_df[test] / demographic_df["population"]
                     )
@@ -387,6 +395,16 @@ for frequency in ["monthly", "weekly"]:
                 demographic_df["value"] = (
                     demographic_df[test] / demographic_df["population"]
                 )
+
+                if d == "age_band_months":
+                    demographic_df["age_band_months_sorted"] = pd.Categorical(
+                        demographic_df["age_band_months"],
+                        ["0-3 months", "3 months - 5 years", "6-10", "11-20", "21-30"],
+                    )
+
+                    demographic_df = demographic_df.sort_values(
+                        by=["date", "age_band_months_sorted"], ascending=[True, True]
+                    )
 
                 demographic_df.to_csv(
                     OUTPUT_DIR
