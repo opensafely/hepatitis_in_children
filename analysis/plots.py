@@ -49,7 +49,7 @@ for frequency in ["monthly", "weekly"]:
             parse_dates=["date"],
         )
 
-        df = redact_small_numbers(df, 5, test, "population", "value", "date", None)
+        df = redact_small_numbers(df, 7, test, "population", "value", "date", None)
 
         df[test] = df[test].apply(lambda x: round_values(x, base=5))
 
@@ -115,7 +115,7 @@ for frequency in ["monthly", "weekly"]:
             )
 
             df = redact_small_numbers(
-                df, 5, test, "population", "value", "date", "age_band_months"
+                df, 7, test, "population", "value", "date", "age_band_months"
             )
             df[test] = df[test].apply(lambda x: round_values(x, base=5))
             df["population"] = df["population"].apply(lambda x: round_values(x, base=5))
@@ -202,7 +202,7 @@ for frequency in ["monthly", "weekly"]:
             #     df_oor["date"] = df_oor["date"].astype(str)
 
             df_oor = redact_small_numbers(
-                df_oor, 5, numerator, test, "value", "date", None
+                df_oor, 7, numerator, test, "value", "date", None
             )
             df_oor[numerator] = df_oor[numerator].apply(
                 lambda x: round_values(x, base=5)
@@ -245,7 +245,7 @@ for frequency in ["monthly", "weekly"]:
 
             df_oor_cov = redact_small_numbers(
                 df_oor_cov,
-                5,
+                7,
                 numerator,
                 test,
                 "value",
@@ -298,7 +298,7 @@ for frequency in ["monthly", "weekly"]:
             )
 
             df_oor_age = redact_small_numbers(
-                df_oor_age, 5, numerator, test, "value", "date", "age_band_months"
+                df_oor_age, 7, numerator, test, "value", "date", "age_band_months"
             )
 
             df_oor_age[numerator] = df_oor_age[numerator].apply(
@@ -383,7 +383,7 @@ for frequency in ["monthly", "weekly"]:
 
                 demographic_df["rate"] = calculate_rate(demographic_df, "value")
                 demographic_df = redact_small_numbers(
-                    demographic_df, 5, test, "population", "rate", "date", d
+                    demographic_df, 7, test, "population", "rate", "date", d
                 )
 
                 demographic_df[test] = demographic_df[test].apply(
