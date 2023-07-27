@@ -146,9 +146,17 @@ actions:
       moderately_sensitive:
         notebook: output/report.html
 
+  subplots:
+    run: >
+      python:latest python analysis/subplots.py
+    needs: [generate_plots]
+    outputs:
+      moderately_sensitive:
+        monthly: output/subplot_*.png
+
   project_report:
     run: jupyter:latest jupyter nbconvert /workspace/analysis/project_report.ipynb --execute --to html --template basic --output-dir=/workspace/output --ExecutePreprocessor.timeout=86400 --no-input
-    needs: [generate_plots]
+    needs: [subplots]
     outputs:
       moderately_sensitive:
         notebook: output/project_report.html

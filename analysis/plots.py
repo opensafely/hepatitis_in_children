@@ -182,19 +182,6 @@ for frequency in ["monthly", "weekly"]:
                 parse_dates=["date"],
             )
 
-            # # if ast plot quarterly numbers instead
-
-            # if test == "ast":
-            #     df_oor = (
-            #         df_oor.groupby(pd.PeriodIndex(df["date"], freq="q"), axis=0)[
-            #             [numerator, test]
-            #         ]
-            #         .sum()
-            #         .reset_index()
-            #     )
-            #     df_oor["value"] = df_oor[numerator] / df_oor[test]
-            #     df_oor["date"] = df_oor["date"].astype(str)
-
             df_oor = redact_small_numbers(
                 df_oor, 7, numerator, test, "value", "date", None
             )

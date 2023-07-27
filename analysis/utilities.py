@@ -222,7 +222,7 @@ def drop_irrelevant_practices(df):
     """
 
     is_relevant = df.groupby("practice").value.any()
-    df_relevant = df[df.practice.isin(is_relevant[is_relevant is True].index)]
+    df_relevant = df[df.practice.isin(is_relevant[is_relevant].index)]
     practice_summary = {
         "num_practices": count_unique_practices(df),
         "num_practices_included": count_unique_practices(df_relevant),
