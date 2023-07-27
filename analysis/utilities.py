@@ -22,7 +22,7 @@ def get_date_input_file(file: str) -> str:
         raise Exception("Not valid input file format")
 
     else:
-        date = result = re.search(r"input_(.*)\.csv.gz", file)
+        date = re.search(r"input_(.*)\.csv.gz", file)
         return date.group(1)
 
 
@@ -39,7 +39,7 @@ def get_date_input_file_weekly(file: str) -> str:
         raise Exception("Not valid input file format")
 
     else:
-        date = result = re.search(r"input_weekly_(.*)\.csv.gz", file)
+        date = re.search(r"input_weekly_(.*)\.csv.gz", file)
         return date.group(1)
 
 
@@ -222,7 +222,7 @@ def drop_irrelevant_practices(df):
     """
 
     is_relevant = df.groupby("practice").value.any()
-    df_relevant = df[df.practice.isin(is_relevant[is_relevant == True].index)]
+    df_relevant = df[df.practice.isin(is_relevant[is_relevant is True].index)]
     practice_summary = {
         "num_practices": count_unique_practices(df),
         "num_practices_included": count_unique_practices(df_relevant),

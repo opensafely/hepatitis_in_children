@@ -1,5 +1,4 @@
 from cohortextractor import StudyDefinition, patients
-from codelists import *
 
 
 study = StudyDefinition(

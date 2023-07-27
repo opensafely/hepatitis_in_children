@@ -1,11 +1,9 @@
 import pandas as pd
-import numpy as np
 import json
 from pathlib import Path
 from ebmdatalab import charts
 from utilities import (
     OUTPUT_DIR,
-    ANALYSIS_DIR,
     plot_measures,
     redact_small_numbers,
     convert_binary,

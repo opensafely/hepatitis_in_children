@@ -1,13 +1,9 @@
 import pandas as pd
-import numpy as np
 from pathlib import Path
 from utilities import (
     OUTPUT_DIR,
     match_input_files,
-    match_input_files_weekly,
     get_date_input_file,
-    get_date_input_file_weekly,
-    redact_small_numbers,
 )
 
 Path("output/monthly/joined/redacted").mkdir(parents=True, exist_ok=True)

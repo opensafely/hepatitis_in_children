@@ -1,5 +1,11 @@
 from cohortextractor import StudyDefinition, patients, Measure
-from codelists import *
+from codelists import (
+    hepatitis_codelist,
+    gi_illness_codelist,
+    alt_codelist,
+    ast_codelist,
+    bilirubin_codelist,
+)
 
 
 study = StudyDefinition(
@@ -348,37 +354,37 @@ study = StudyDefinition(
 
 measures = [
     Measure(
-        id=f"gi_illness_rate",
+        id="gi_illness_rate",
         numerator="gi_illness",
         denominator="population",
         group_by="population",
     ),
     Measure(
-        id=f"gi_illness_practice_rate",
+        id="gi_illness_practice_rate",
         numerator="gi_illness",
         denominator="population",
         group_by="practice",
     ),
     Measure(
-        id=f"gi_illness_age_band_months_rate",
+        id="gi_illness_age_band_months_rate",
         numerator="gi_illness",
         denominator="population",
         group_by="age_band_months",
     ),
     Measure(
-        id=f"hepatitis_rate",
+        id="hepatitis_rate",
         numerator="hepatitis",
         denominator="population",
         group_by="population",
     ),
     Measure(
-        id=f"hepatitis_practice_rate",
+        id="hepatitis_practice_rate",
         numerator="hepatitis",
         denominator="population",
         group_by="practice",
     ),
     Measure(
-        id=f"hepatitis_age_band_months_rate",
+        id="hepatitis_age_band_months_rate",
         numerator="hepatitis",
         denominator="population",
         group_by="age_band_months",
