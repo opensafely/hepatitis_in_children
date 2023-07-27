@@ -152,3 +152,11 @@ actions:
     outputs:
       moderately_sensitive:
         notebook: output/project_report.html
+
+  subplots:
+    run: >
+      python:latest python analysis/subplots.py
+    needs: [generate_plots]
+    outputs:
+      moderately_sensitive:
+        monthly: output/subplot_*.png
