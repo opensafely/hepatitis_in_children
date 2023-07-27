@@ -1,5 +1,11 @@
 from cohortextractor import StudyDefinition, patients, Measure
-from codelists import *
+from codelists import (
+    hepatitis_codelist,
+    gi_illness_codelist,
+    alt_codelist,
+    ast_codelist,
+    bilirubin_codelist,
+)
 
 
 study = StudyDefinition(
@@ -133,7 +139,7 @@ study = StudyDefinition(
         between=["index_date", "index_date + 6 days"],
         returning="numeric_value",
         find_last_match_in_period=True,
-        include_date_of_match=True, 
+        include_date_of_match=True,
         date_format="YYYY-MM-DD",
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
@@ -214,7 +220,7 @@ study = StudyDefinition(
         between=["index_date", "index_date + 6 days"],
         returning="numeric_value",
         find_last_match_in_period=True,
-        include_date_of_match=True, 
+        include_date_of_match=True,
         date_format="YYYY-MM-DD",
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
@@ -295,7 +301,7 @@ study = StudyDefinition(
         between=["index_date", "index_date + 6 days"],
         returning="numeric_value",
         find_last_match_in_period=True,
-        include_date_of_match=True, 
+        include_date_of_match=True,
         date_format="YYYY-MM-DD",
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
@@ -348,37 +354,37 @@ study = StudyDefinition(
 
 measures = [
     Measure(
-        id=f"gi_illness_rate",
+        id="gi_illness_rate",
         numerator="gi_illness",
         denominator="population",
         group_by="population",
     ),
     Measure(
-        id=f"gi_illness_practice_rate",
+        id="gi_illness_practice_rate",
         numerator="gi_illness",
         denominator="population",
         group_by="practice",
     ),
     Measure(
-        id=f"gi_illness_age_band_months_rate",
+        id="gi_illness_age_band_months_rate",
         numerator="gi_illness",
         denominator="population",
         group_by="age_band_months",
     ),
     Measure(
-        id=f"hepatitis_rate",
+        id="hepatitis_rate",
         numerator="hepatitis",
         denominator="population",
         group_by="population",
     ),
     Measure(
-        id=f"hepatitis_practice_rate",
+        id="hepatitis_practice_rate",
         numerator="hepatitis",
         denominator="population",
         group_by="practice",
     ),
     Measure(
-        id=f"hepatitis_age_band_months_rate",
+        id="hepatitis_age_band_months_rate",
         numerator="hepatitis",
         denominator="population",
         group_by="age_band_months",
@@ -429,7 +435,6 @@ for test in ["alt", "ast", "bilirubin"]:
         )
 
     if test in ["alt", "ast"]:
-
         m_oor = Measure(
             id=f"{test}_oor_rate",
             numerator=f"{test}_numeric_value_out_of_range",
@@ -440,7 +445,6 @@ for test in ["alt", "ast", "bilirubin"]:
         measures.extend([m, m_oor, m_oor_recent_cov, m_oor_age])
 
     else:
-
         measures.extend([m, m_oor_ref, m_oor_recent_cov, m_oor_age])
 
     for d in ["age_band_months", "region", "practice"]:

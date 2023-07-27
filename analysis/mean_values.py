@@ -1,13 +1,9 @@
 import pandas as pd
-import numpy as np
 from pathlib import Path
 from utilities import (
     OUTPUT_DIR,
     match_input_files,
-    match_input_files_weekly,
     get_date_input_file,
-    get_date_input_file_weekly,
-    redact_small_numbers,
 )
 
 Path("output/monthly/joined/redacted").mkdir(parents=True, exist_ok=True)
@@ -26,7 +22,6 @@ for file in (OUTPUT_DIR / "monthly/joined").iterdir():
         date = get_date_input_file(file.name)
 
         for test in ["alt", "ast", "bilirubin"]:
-
             # only want those who have had a test
             df_subset = df.loc[df[test] == 1, :]
 
@@ -47,18 +42,18 @@ for test in ["alt", "ast", "bilirubin"]:
     mean_ages_months_concat.to_csv(
         OUTPUT_DIR / f"monthly/joined/mean_test_value_{test}_by_age.csv"
     )
- 
-    if test == "ast":
-                    mean_ages_months_concat.loc[
-                        mean_ages_months_concat["age_band_months"].isin(
-                            ["0-3 months", "3 months - 5 years"]
-                        ),
-                        "age_band_months",
-                    ] = "0-5"
-                    mean_ages_months_concat = mean_ages_months_concat.groupby(
-                        by=["date", "age_band_months"]
-                    )[[f"{test}_numeric_value"]].mean().reset_index()
-                    
-                    
 
-  
+    if test == "ast":
+        mean_ages_months_concat.loc[
+            mean_ages_months_concat["age_band_months"].isin(
+                ["0-3 months", "3 months - 5 years"]
+            ),
+            "age_band_months",
+        ] = "0-5"
+        mean_ages_months_concat = (
+            mean_ages_months_concat.groupby(by=["date", "age_band_months"])[
+                [f"{test}_numeric_value"]
+            ]
+            .mean()
+            .reset_index()
+        )
