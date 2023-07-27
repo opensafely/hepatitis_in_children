@@ -1,10 +1,12 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 from utilities import (
     OUTPUT_DIR,
 )
 
+sns.set_style("darkgrid")
 
 def plot_measures_subplot(
     df,
@@ -26,7 +28,7 @@ def plot_measures_subplot(
         as_bar: Boolean indicating if bar chart should be plotted instead of line chart. Only valid if no categories.
         category: Name of column indicating different categories
     """
-
+    
     df = df.sort_values(by=["date", "age_band_months_sorted"])
     # mask nan values (redacted)
     mask = np.isfinite(df[column_to_plot])
@@ -64,6 +66,7 @@ def plot_measures_subplot(
         else df[column_to_plot].max() * 1.05,
     )
 
+    
     if x_label:
         ax.set_xlabel(x_label)
 
@@ -95,9 +98,9 @@ for i, j in enumerate(["gi_illness", "hepatitis"]):
     plot_measures_subplot(
         df=df,
         ax=axes[i],
-        column_to_plot="rate",
+        column_to_plot=j,
         x_label=x_label,
-        y_label="Rate per 1000",
+        y_label="Count",
         as_bar=False,
         category="age_band_months_sorted",
         show_legend=show_legend,
