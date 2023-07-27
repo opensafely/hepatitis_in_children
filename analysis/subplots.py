@@ -5,6 +5,7 @@ from utilities import (
     OUTPUT_DIR,
 )
 
+
 def plot_measures_subplot(
     df,
     ax,
@@ -13,7 +14,7 @@ def plot_measures_subplot(
     y_label: str,
     as_bar: bool = False,
     category: str = None,
-    show_legend=True
+    show_legend=True,
 ):
     """Produce time series plot from measures table.  One line is plotted for each sub
     category within the category column. Saves output in 'output' dir as jpeg file.
@@ -25,30 +26,30 @@ def plot_measures_subplot(
         as_bar: Boolean indicating if bar chart should be plotted instead of line chart. Only valid if no categories.
         category: Name of column indicating different categories
     """
-    
+
     df = df.sort_values(by=["date", "age_band_months_sorted"])
-    #mask nan values (redacted)
+    # mask nan values (redacted)
     mask = np.isfinite(df[column_to_plot])
-    
-
-
 
     if category:
-
         ages = ["0-3 months", "3 months - 5 years", "6-10", "11-20", "21-30"]
         df = df[df[category].notnull()]
-        
-        for unique_category in ages:
 
+        for unique_category in ages:
             # subset on category column and sort by date
             df_subset = df[df[category] == unique_category].sort_values("date")
 
-            ax.plot(df_subset["date"][mask], df_subset[column_to_plot][mask], marker='o' ,label=unique_category)
+            ax.plot(
+                df_subset["date"][mask],
+                df_subset[column_to_plot][mask],
+                marker="o",
+                label=unique_category,
+            )
     else:
         if as_bar:
             ax.plot.bar("date", column_to_plot, legend=False)
         else:
-            ax.plot(df["date"][mask], df[column_to_plot][mask], marker='o')
+            ax.plot(df["date"][mask], df[column_to_plot][mask], marker="o")
 
     x_labels = sorted(df["date"].unique())
     ax.tick_params(axis="x", labelrotation=90)
@@ -65,17 +66,13 @@ def plot_measures_subplot(
 
     if x_label:
         ax.set_xlabel(x_label)
-    
-    
+
     if category:
         if show_legend:
-            ax.legend(bbox_to_anchor=(1.04, 1), loc="upper left"
-            )
+            ax.legend(bbox_to_anchor=(1.04, 1), loc="upper left")
 
     plt.tight_layout()
 
-    
-    
 
 # hepatitis and gi illness rates subplot
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 8), sharex=True)
@@ -83,33 +80,31 @@ fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 8), sharex=True)
 axes = [ax1, ax2]
 for i, j in enumerate(["gi_illness", "hepatitis"]):
     df = pd.read_csv(
-            OUTPUT_DIR / f"monthly/joined/redacted/measure_{j}_age_band_months_rate.csv",
-            parse_dates=["date"],
-        )
-   
+        OUTPUT_DIR / f"monthly/joined/redacted/measure_{j}_age_band_months_rate.csv",
+        parse_dates=["date"],
+    )
 
-    if i ==0:
-        show_legend=True
-        x_label=None
+    if i == 0:
+        show_legend = True
+        x_label = None
 
     else:
-        show_legend=False
-        x_label="Date"
+        show_legend = False
+        x_label = "Date"
 
     plot_measures_subplot(
-            df=df,
-            ax=axes[i],
-            column_to_plot="rate",
-            x_label=x_label,
-            y_label="Rate per 1000",
-            as_bar=False,
-            category="age_band_months_sorted",
-            show_legend=show_legend
-        )
+        df=df,
+        ax=axes[i],
+        column_to_plot="rate",
+        x_label=x_label,
+        y_label="Rate per 1000",
+        as_bar=False,
+        category="age_band_months_sorted",
+        show_legend=show_legend,
+    )
 
-plt.tight_layout()   
+plt.tight_layout()
 plt.savefig(OUTPUT_DIR / "subplot_gi_hep.png")
-
 
 
 # lft rates subplot
@@ -118,34 +113,33 @@ fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(15, 8), sharex=True)
 axes = [ax1, ax2, ax3]
 for i, j in enumerate(["alt", "ast", "bilirubin"]):
     df = pd.read_csv(
-            OUTPUT_DIR / f"monthly/joined/redacted/measure_{j}_age_band_months_rate.csv",
-            parse_dates=["date"],
-        )
-   
-    
-    if i ==0:
-        show_legend=True
-        x_label=None
+        OUTPUT_DIR / f"monthly/joined/redacted/measure_{j}_age_band_months_rate.csv",
+        parse_dates=["date"],
+    )
+
+    if i == 0:
+        show_legend = True
+        x_label = None
 
     elif i == 1:
-        show_legend=False
-        x_label=None
+        show_legend = False
+        x_label = None
     else:
-        show_legend=False
-        x_label="Date"
+        show_legend = False
+        x_label = "Date"
 
     plot_measures_subplot(
-            df=df,
-            ax=axes[i],
-            column_to_plot="rate",
-            x_label=x_label,
-            y_label="Rate per 1000",
-            as_bar=False,
-            category="age_band_months_sorted",
-            show_legend=show_legend
-        )
+        df=df,
+        ax=axes[i],
+        column_to_plot="rate",
+        x_label=x_label,
+        y_label="Rate per 1000",
+        as_bar=False,
+        category="age_band_months_sorted",
+        show_legend=show_legend,
+    )
 
-plt.tight_layout()   
+plt.tight_layout()
 plt.savefig(OUTPUT_DIR / "subplot_lft.png")
 
 
@@ -155,34 +149,33 @@ fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(15, 8), sharex=True)
 axes = [ax1, ax2, ax3]
 for i, j in enumerate(["alt", "ast", "bilirubin"]):
     df = pd.read_csv(
-            OUTPUT_DIR / f"monthly/joined/redacted/measure_{j}_oor_age_rate.csv",
-            parse_dates=["date"],
-        )
-    
-    df["value"] = df["value"]*100
-   
-    
-    if i ==0:
-        show_legend=True
-        x_label=None
+        OUTPUT_DIR / f"monthly/joined/redacted/measure_{j}_oor_age_rate.csv",
+        parse_dates=["date"],
+    )
+
+    df["value"] = df["value"] * 100
+
+    if i == 0:
+        show_legend = True
+        x_label = None
 
     elif i == 1:
-        show_legend=False
-        x_label=None
+        show_legend = False
+        x_label = None
     else:
-        show_legend=False
-        x_label="Date"
+        show_legend = False
+        x_label = "Date"
 
     plot_measures_subplot(
-            df=df,
-            ax=axes[i],
-            column_to_plot="value",
-            x_label=x_label,
-            y_label="% out of range",
-            as_bar=False,
-            category="age_band_months_sorted",
-            show_legend=show_legend
-        )
+        df=df,
+        ax=axes[i],
+        column_to_plot="value",
+        x_label=x_label,
+        y_label="% out of range",
+        as_bar=False,
+        category="age_band_months_sorted",
+        show_legend=show_legend,
+    )
 
-plt.tight_layout()   
+plt.tight_layout()
 plt.savefig(OUTPUT_DIR / "subplot_oor.png")

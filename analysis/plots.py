@@ -19,9 +19,7 @@ Path("output/weekly/joined/redacted").mkdir(parents=True, exist_ok=True)
 
 
 for frequency in ["monthly", "weekly"]:
-
     for test in ["alt", "ast", "bilirubin", "gi_illness", "hepatitis"]:
-
         if frequency == "monthly":
             if test in ["alt", "ast", "bilirubin"]:
                 mean_values = pd.read_csv(
@@ -160,10 +158,8 @@ for frequency in ["monthly", "weekly"]:
 
         # plot out of range rates
         if test in ["alt", "ast", "bilirubin"]:
-
             # plot mean value
             if frequency == "monthly":
-
                 plot_measures(
                     df=mean_values,
                     filename=f"{frequency}/joined/plot_{test}_mean_value",

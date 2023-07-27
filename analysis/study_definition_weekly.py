@@ -133,7 +133,7 @@ study = StudyDefinition(
         between=["index_date", "index_date + 6 days"],
         returning="numeric_value",
         find_last_match_in_period=True,
-        include_date_of_match=True, 
+        include_date_of_match=True,
         date_format="YYYY-MM-DD",
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
@@ -214,7 +214,7 @@ study = StudyDefinition(
         between=["index_date", "index_date + 6 days"],
         returning="numeric_value",
         find_last_match_in_period=True,
-        include_date_of_match=True, 
+        include_date_of_match=True,
         date_format="YYYY-MM-DD",
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
@@ -295,7 +295,7 @@ study = StudyDefinition(
         between=["index_date", "index_date + 6 days"],
         returning="numeric_value",
         find_last_match_in_period=True,
-        include_date_of_match=True, 
+        include_date_of_match=True,
         date_format="YYYY-MM-DD",
         return_expectations={
             "float": {"distribution": "normal", "mean": 45.0, "stddev": 20},
@@ -429,7 +429,6 @@ for test in ["alt", "ast", "bilirubin"]:
         )
 
     if test in ["alt", "ast"]:
-
         m_oor = Measure(
             id=f"{test}_oor_rate",
             numerator=f"{test}_numeric_value_out_of_range",
@@ -440,7 +439,6 @@ for test in ["alt", "ast", "bilirubin"]:
         measures.extend([m, m_oor, m_oor_recent_cov, m_oor_age])
 
     else:
-
         measures.extend([m, m_oor_ref, m_oor_recent_cov, m_oor_age])
 
     for d in ["age_band_months", "region", "practice"]:

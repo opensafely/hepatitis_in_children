@@ -9,16 +9,12 @@ study = StudyDefinition(
         "rate": "exponential_increase",
         "incidence": 0.1,
     },
-    
     population=patients.all(),
-    
     dob=patients.date_of_birth(
-    "YYYY-MM",
-    return_expectations={
-        "date": {"earliest": "1992-01-01", "latest": "today"},
-        "rate": "uniform",
-    }
+        "YYYY-MM",
+        return_expectations={
+            "date": {"earliest": "1992-01-01", "latest": "today"},
+            "rate": "uniform",
+        },
     ),
-    
 )
-

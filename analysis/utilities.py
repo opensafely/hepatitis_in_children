@@ -8,6 +8,7 @@ BASE_DIR = Path(__file__).parents[1]
 OUTPUT_DIR = BASE_DIR / "output"
 ANALYSIS_DIR = BASE_DIR / "analysis"
 
+
 def match_input_files(file: str) -> bool:
     """Checks if file name has format outputted by cohort extractor"""
     pattern = r"^input_20\d\d-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])\.csv.gz"
@@ -23,6 +24,7 @@ def get_date_input_file(file: str) -> str:
     else:
         date = result = re.search(r"input_(.*)\.csv.gz", file)
         return date.group(1)
+
 
 def match_input_files_weekly(file: str) -> bool:
     """Checks if file name has format outputted by cohort extractor"""
@@ -40,7 +42,10 @@ def get_date_input_file_weekly(file: str) -> str:
         date = result = re.search(r"input_weekly_(.*)\.csv.gz", file)
         return date.group(1)
 
-def redact_small_numbers(df, n, numerator, denominator, rate_column, date_column, groupby_column):
+
+def redact_small_numbers(
+    df, n, numerator, denominator, rate_column, date_column, groupby_column
+):
     """
     Takes counts df as input and suppresses low numbers.  Sequentially redacts
     low numbers from numerator and denominator until count of redcted values >=n.
@@ -51,25 +56,24 @@ def redact_small_numbers(df, n, numerator, denominator, rate_column, date_column
     denominator: denominator column to be redacted
     groupby_column: column measure is grouped by, if any
     """
-    
+
     def suppress_column(column):
-       
         suppressed_column = column[column > n]
         suppressed_count = column[column <= n].sum()
-        
+
         # if no values suppressed dont need to suppress anything
         if len(suppressed_column) == len(column):
             pass
 
         else:
             column[column <= n] = np.nan
-            #if not all nan make sure enough redacted
+            # if not all nan make sure enough redacted
             if column.any():
                 while suppressed_count <= n:
                     suppressed_count += column.min()
 
                     column[column.idxmin()] = np.nan
-                    
+
                     # if whole column redacted stop
                     if not column.any():
                         break
@@ -78,13 +82,12 @@ def redact_small_numbers(df, n, numerator, denominator, rate_column, date_column
     df_list = []
 
     dates = df[date_column].unique()
-    
+
     for d in dates:
-        
         df_subset = df.loc[df[date_column] == d, :]
-        
+
         for column in [numerator, denominator]:
-            df_subset.loc[:, column] = suppress_column(df_subset.loc[:,column])
+            df_subset.loc[:, column] = suppress_column(df_subset.loc[:, column])
 
         df_subset.loc[
             (df_subset[numerator].isna()) | (df_subset[denominator].isna()), rate_column
@@ -95,15 +98,16 @@ def redact_small_numbers(df, n, numerator, denominator, rate_column, date_column
 
     if groupby_column:
         for column in [numerator, denominator]:
-            
-            redacted_df.groupby(by=groupby_column)[[column]].transform(lambda x:suppress_column(x))
+            redacted_df.groupby(by=groupby_column)[[column]].transform(
+                lambda x: suppress_column(x)
+            )
 
     else:
         for column in [numerator, denominator]:
-            
             redacted_df[column] = suppress_column(redacted_df[column])
 
     return redacted_df
+
 
 def plot_measures(
     df,
@@ -125,24 +129,25 @@ def plot_measures(
         category: Name of column indicating different categories
     """
     plt.figure(figsize=(15, 8))
-    
+
     df = df.sort_values(by="date")
-    #mask nan values (redacted)
+    # mask nan values (redacted)
     mask = np.isfinite(df[column_to_plot])
-    
+
     if category:
         df = df[df[category].notnull()]
         for unique_category in sorted(df[category].unique()):
-
             # subset on category column and sort by date
             df_subset = df[df[category] == unique_category].sort_values("date")
 
-            plt.plot(df_subset["date"][mask], df_subset[column_to_plot][mask], marker='o')
+            plt.plot(
+                df_subset["date"][mask], df_subset[column_to_plot][mask], marker="o"
+            )
     else:
         if as_bar:
             df.plot.bar("date", column_to_plot, legend=False)
         else:
-            plt.plot(df["date"][mask], df[column_to_plot][mask], marker='o')
+            plt.plot(df["date"][mask], df[column_to_plot][mask], marker="o")
 
     x_labels = sorted(df["date"].unique())
     plt.ylabel(y_label)
@@ -167,6 +172,7 @@ def plot_measures(
     plt.savefig(f"output/{filename}.png")
     plt.clf()
 
+
 def convert_binary(df, binary_column, positive, negative):
     """Converts a column with binary variable codes as 0 and 1 to understandable strings.
     Args:
@@ -180,6 +186,7 @@ def convert_binary(df, binary_column, positive, negative):
     replace_dict = {0: negative, 1: positive}
     df[binary_column] = df[binary_column].replace(replace_dict)
     return df
+
 
 def calculate_rate(df, value_col, rate_per=1000, round_rate=False):
     """Calculates the number of events per 1,000 of the population.
@@ -199,8 +206,10 @@ def calculate_rate(df, value_col, rate_per=1000, round_rate=False):
 
     return rate
 
+
 def count_unique_practices(df):
     return len(np.unique(df["practice"]))
+
 
 def drop_irrelevant_practices(df):
     """Drops irrelevant practices from the given measure table.
@@ -214,12 +223,16 @@ def drop_irrelevant_practices(df):
 
     is_relevant = df.groupby("practice").value.any()
     df_relevant = df[df.practice.isin(is_relevant[is_relevant == True].index)]
-    practice_summary = {"num_practices": count_unique_practices(df), "num_practices_included": count_unique_practices(df_relevant)}
+    practice_summary = {
+        "num_practices": count_unique_practices(df),
+        "num_practices_included": count_unique_practices(df_relevant),
+    }
     return df_relevant, practice_summary
+
 
 def round_values(x, base=5):
     if not np.isnan(x):
-        rounded = int(base * round(x/base))
+        rounded = int(base * round(x / base))
     else:
         rounded = np.nan
-    return  rounded
+    return rounded

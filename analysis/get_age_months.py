@@ -10,7 +10,6 @@ from utilities import (
 
 for file in (OUTPUT_DIR / "monthly/joined").iterdir():
     if match_input_files(file.name):
-
         df = pd.read_csv(
             (OUTPUT_DIR / "monthly/joined") / file.name, parse_dates=["dob"]
         )
@@ -37,7 +36,6 @@ for file in (OUTPUT_DIR / "monthly/joined").iterdir():
 
 
 for file in (OUTPUT_DIR / "weekly/joined").iterdir():
-
     if match_input_files_weekly(file.name):
         df = pd.read_csv(
             (OUTPUT_DIR / "weekly/joined") / file.name, parse_dates=["dob"]
