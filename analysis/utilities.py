@@ -150,9 +150,10 @@ def plot_measures(
             plt.plot(df["date"][mask], df[column_to_plot][mask], marker="o")
 
     x_labels = sorted(df["date"].unique())
-    plt.ylabel(y_label)
-    plt.xlabel("Date")
-    plt.xticks(x_labels, rotation="vertical")
+    plt.ylabel(y_label, fontsize=18)
+    plt.xlabel("Date", fontsize=18)
+    plt.xticks(x_labels, rotation="vertical", fontsize=16)
+    plt.yticks(fontsize=16)
     plt.title(title)
     plt.xlim(x_labels[0], x_labels[-1])
     plt.ylim(
@@ -169,7 +170,7 @@ def plot_measures(
 
     plt.tight_layout()
 
-    plt.savefig(f"output/{filename}.png")
+    plt.savefig(f"output/{filename}.png", dpi=300)
     plt.clf()
 
 
