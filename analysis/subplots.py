@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 import seaborn as sns
 from utilities import (
     OUTPUT_DIR,
@@ -53,12 +54,14 @@ def plot_measures_subplot(
         else:
             ax.plot(df["date"][mask], df[column_to_plot][mask], marker="o")
 
-    x_labels = sorted(df["date"].unique())
-    ax.tick_params(axis="x", labelrotation=90)
-    ax.set_ylabel(y_label)
-    ax.set_xticks(x_labels)
-    # ax.title(title)
-    ax.set_xlim(x_labels[0], x_labels[-1])
+    
+    ax.tick_params(axis="y", labelsize=16)
+    ax.set_ylabel(y_label, fontsize=18)
+    
+
+    
+
+    
     ax.set_ylim(
         bottom=0,
         top=100
@@ -68,11 +71,18 @@ def plot_measures_subplot(
 
     
     if x_label:
+        x_labels = sorted(df["date"].unique())
         ax.set_xlabel(x_label)
+        ax.set_xticks(x_labels)
+        
+        ax.tick_params(axis="x", labelrotation=90, labelsize=14)
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %Y'))
+        ax.set_xlabel("Date", fontsize=18)
+        ax.set_xlim(x_labels[0], x_labels[-1])
 
     if category:
         if show_legend:
-            ax.legend(bbox_to_anchor=(1.04, 1), loc="upper left")
+            ax.legend(bbox_to_anchor=(1.04, 1), loc="upper left", fontsize=16)
 
     plt.tight_layout()
 
@@ -107,7 +117,7 @@ for i, j in enumerate(["gi_illness", "hepatitis"]):
     )
 
 plt.tight_layout()
-plt.savefig(OUTPUT_DIR / "subplot_gi_hep.png")
+plt.savefig(OUTPUT_DIR / "subplot_gi_hep.png", dpi=300)
 
 
 # lft rates subplot
@@ -143,7 +153,7 @@ for i, j in enumerate(["alt", "ast", "bilirubin"]):
     )
 
 plt.tight_layout()
-plt.savefig(OUTPUT_DIR / "subplot_lft.png")
+plt.savefig(OUTPUT_DIR / "subplot_lft.png", dpi=300)
 
 
 # lft oor rates subplot
@@ -181,4 +191,4 @@ for i, j in enumerate(["alt", "ast", "bilirubin"]):
     )
 
 plt.tight_layout()
-plt.savefig(OUTPUT_DIR / "subplot_oor.png")
+plt.savefig(OUTPUT_DIR / "subplot_oor.png", dpi=300)
