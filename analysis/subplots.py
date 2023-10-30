@@ -76,15 +76,14 @@ def plot_measures_subplot(
         ax.set_xticks(x_labels)
         
         ax.tick_params(axis="x", labelrotation=90, labelsize=14)
-        ax.xaxis.set_major_formatter(mdates.DateFormatter('%b %Y'))
         ax.set_xlabel("Date", fontsize=18)
         ax.set_xlim(x_labels[0], x_labels[-1])
-
+        ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %Y"))
+       
     if category:
         if show_legend:
             ax.legend(bbox_to_anchor=(1.04, 1), loc="upper left", fontsize=16)
-
-    plt.tight_layout()
+   
 
 
 # hepatitis and gi illness rates subplot
