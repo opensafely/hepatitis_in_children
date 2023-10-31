@@ -362,9 +362,9 @@ for frequency in ["monthly", "weekly"]:
                         demographic_df[test] / demographic_df["population"]
                     )
 
-                demographic_df["rate"] = calculate_rate(demographic_df, "value")
+                
                 demographic_df = redact_small_numbers(
-                    demographic_df, 7, test, "population", "rate", "date", d
+                    demographic_df, 7, test, "population", "value", "date", d
                 )
 
                 demographic_df[test] = demographic_df[test].apply(
@@ -376,6 +376,8 @@ for frequency in ["monthly", "weekly"]:
                 demographic_df["value"] = (
                     demographic_df[test] / demographic_df["population"]
                 )
+
+                demographic_df["rate"] = calculate_rate(demographic_df, "value")
 
                 if d == "age_band_months":
                     demographic_df["age_band_months_sorted"] = pd.Categorical(
