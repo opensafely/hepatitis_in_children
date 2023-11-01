@@ -196,11 +196,11 @@ for i, j in enumerate(["alt", "ast", "bilirubin"]):
 
     if i == 0:
         show_legend = True
-        x_label = "Month"
+        x_label = None
 
     elif i == 1:
         show_legend = False
-        x_label = "Quarter"
+        x_label = None
     else:
         show_legend = False
         x_label = "Month"
@@ -209,7 +209,7 @@ for i, j in enumerate(["alt", "ast", "bilirubin"]):
         plot_measures_subplot(
             df=df,
             ax=axes[i],
-            column_to_plot="numerator",
+            column_to_plot=f"{j}_numeric_value_out_of_range",
             x_label=x_label,
             y_label="Count",
             as_bar=False,

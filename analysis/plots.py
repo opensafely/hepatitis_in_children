@@ -175,11 +175,11 @@ for frequency in ["monthly", "weekly"]:
 
             if test == "bilirubin":
                 input_file = f"{frequency}/joined/measure_{test}_oor_ref_rate.csv"
-                numerator = "value"
+                numerator = "bilirubin_numeric_value_out_of_ref_range"
                 output_file = f"measure_{test}_oor_ref_rate.csv"
             else:
                 input_file = f"{frequency}/joined/measure_{test}_oor_rate.csv"
-                numerator = "value"
+                numerator = f"{test}_numeric_value_out_of_range"
                 output_file = f"measure_{test}_oor_rate.csv"
 
             df_oor = pd.read_csv(
@@ -189,9 +189,10 @@ for frequency in ["monthly", "weekly"]:
 
             if test=="ast":
                 # group monthly data into quarters
+        
                 df_oor["quarter"] = df_oor["date"].dt.to_period("Q").astype(str)
                 df_oor = df_oor.groupby(by=["quarter"])[[numerator, "population"]].sum().reset_index()
-                df_oor["numerator"] = df_oor[numerator] * df_oor["population"]
+                
                 
                 df_oor[numerator] = df_oor[numerator].apply(
                     lambda x: round_values(x, base=5)
