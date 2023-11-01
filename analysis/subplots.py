@@ -7,7 +7,7 @@ from utilities import (
     OUTPUT_DIR,
 )
 
-sns.set_style("darkgrid")
+sns.set_style("whitegrid")
 
 def plot_measures_subplot(
     df,
