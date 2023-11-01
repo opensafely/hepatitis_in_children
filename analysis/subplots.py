@@ -30,7 +30,16 @@ def plot_measures_subplot(
         category: Name of column indicating different categories
     """
     
-    df = df.sort_values(by=["date", "age_band_months_sorted"])
+    if ("date" in df.columns) & ("age_band_months" in df.columns):
+
+        df = df.sort_values(by=["date", "age_band_months_sorted"])
+
+
+    if "date" in df.columns:
+        date_column = "date"
+    else:
+        date_column = "quarter"
+
     # mask nan values (redacted)
     mask = np.isfinite(df[column_to_plot])
 
@@ -40,7 +49,7 @@ def plot_measures_subplot(
 
         for unique_category in ages:
             # subset on category column and sort by date
-            df_subset = df[df[category] == unique_category].sort_values("date")
+            df_subset = df[df[category] == unique_category].sort_values(date_column)
 
             ax.plot(
                 df_subset["date"][mask],
@@ -50,9 +59,10 @@ def plot_measures_subplot(
             )
     else:
         if as_bar:
-            ax.plot.bar("date", column_to_plot, legend=False)
+
+            ax.plot.bar(date_column, column_to_plot, legend=False)
         else:
-            ax.plot(df["date"][mask], df[column_to_plot][mask], marker="o")
+            ax.plot(df[date_column][mask], df[column_to_plot][mask], marker="o")
 
     
     ax.tick_params(axis="y", labelsize=16)
@@ -71,12 +81,16 @@ def plot_measures_subplot(
 
     
     if x_label:
-        x_labels = sorted(df["date"].unique())
+        if "date" in df.columns:
+            x_labels = sorted(df["date"].unique())
+        else:
+            x_labels = sorted(df["quarter"].unique())
+ 
         ax.set_xlabel(x_label)
         ax.set_xticks(x_labels)
         
         ax.tick_params(axis="x", labelrotation=90, labelsize=14)
-        ax.set_xlabel("Date", fontsize=18)
+        ax.set_xlabel(x_label, fontsize=18)
         ax.set_xlim(x_labels[0], x_labels[-1])
         ax.xaxis.set_major_formatter(mdates.DateFormatter("%b %Y"))
        
@@ -102,7 +116,7 @@ for i, j in enumerate(["gi_illness", "hepatitis"]):
 
     else:
         show_legend = False
-        x_label = "Date"
+        x_label = "Month"
 
     plot_measures_subplot(
         df=df,
@@ -138,7 +152,7 @@ for i, j in enumerate(["alt", "ast", "bilirubin"]):
         x_label = None
     else:
         show_legend = False
-        x_label = "Date"
+        x_label = "Month"
 
     plot_measures_subplot(
         df=df,
@@ -160,34 +174,68 @@ fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(15, 8), sharex=True)
 
 axes = [ax1, ax2, ax3]
 for i, j in enumerate(["alt", "ast", "bilirubin"]):
-    df = pd.read_csv(
-        OUTPUT_DIR / f"monthly/joined/redacted/measure_{j}_oor_age_rate.csv",
-        parse_dates=["date"],
-    )
+
+    if j == "ast":
+        df = pd.read_csv(
+            OUTPUT_DIR / f"monthly/joined/redacted/measure_{j}_oor_rate.csv",
+            parse_dates=["quarter"],
+        )
+    
+    elif j == "bilirubin":
+        df = pd.read_csv(
+            OUTPUT_DIR / f"monthly/joined/redacted/measure_{j}_oor_ref_rate.csv",
+            parse_dates=["date"],
+        )
+    else:
+        df = pd.read_csv(
+            OUTPUT_DIR / f"monthly/joined/redacted/measure_{j}_oor_rate.csv",
+            parse_dates=["date"],
+        )
 
     df["value"] = df["value"] * 100
 
     if i == 0:
         show_legend = True
-        x_label = None
+        x_label = "Month"
 
     elif i == 1:
         show_legend = False
-        x_label = None
+        x_label = "Quarter"
     else:
         show_legend = False
-        x_label = "Date"
+        x_label = "Month"
 
-    plot_measures_subplot(
-        df=df,
-        ax=axes[i],
-        column_to_plot="value",
-        x_label=x_label,
-        y_label="% out of range",
-        as_bar=False,
-        category="age_band_months_sorted",
-        show_legend=show_legend,
-    )
+    if j == "ast":
+        plot_measures_subplot(
+            df=df,
+            ax=axes[i],
+            column_to_plot="numerator",
+            x_label=x_label,
+            y_label="Count",
+            as_bar=False,
+            show_legend=show_legend,
+        )
+    
+    elif j == "bilirubin":
+        plot_measures_subplot(
+            df=df,
+            ax=axes[i],
+            column_to_plot=f"{j}_numeric_value_out_of_ref_range",
+            x_label=x_label,
+            y_label="Count",
+            as_bar=False,
+            show_legend=show_legend,
+        )
+    else:
+        plot_measures_subplot(
+            df=df,
+            ax=axes[i],
+            column_to_plot=f"{j}_numeric_value_out_of_range",
+            x_label=x_label,
+            y_label="Count",
+            as_bar=False,
+            show_legend=show_legend,
+        )
 
 plt.tight_layout()
 plt.savefig(OUTPUT_DIR / "subplot_oor.png", dpi=300)
