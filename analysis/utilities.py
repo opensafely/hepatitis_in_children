@@ -57,26 +57,10 @@ def redact_small_numbers(
     groupby_column: column measure is grouped by, if any
     """
 
-    def suppress_column(column):
-        suppressed_column = column[column > n]
-        suppressed_count = column[column <= n].sum()
-
-        # if no values suppressed dont need to suppress anything
-        if len(suppressed_column) == len(column):
-            pass
-
-        else:
-            column[column <= n] = np.nan
-            # if not all nan make sure enough redacted
-            if column.any():
-                while suppressed_count <= n:
-                    suppressed_count += column.min()
-
-                    column[column.idxmin()] = np.nan
-
-                    # if whole column redacted stop
-                    if not column.any():
-                        break
+    def suppress_column(column, n):
+        
+        column[column <= n] = np.nan
+            
         return column
 
     df_list = []
@@ -87,7 +71,7 @@ def redact_small_numbers(
         df_subset = df.loc[df[date_column] == d, :]
 
         for column in [numerator, denominator]:
-            df_subset.loc[:, column] = suppress_column(df_subset.loc[:, column])
+            df_subset.loc[:, column] = suppress_column(df_subset.loc[:, column], n)
 
         df_subset.loc[
             (df_subset[numerator].isna()) | (df_subset[denominator].isna()), rate_column
@@ -99,12 +83,12 @@ def redact_small_numbers(
     if groupby_column:
         for column in [numerator, denominator]:
             redacted_df.groupby(by=groupby_column)[[column]].transform(
-                lambda x: suppress_column(x)
+                lambda x: suppress_column(x, n)
             )
 
     else:
         for column in [numerator, denominator]:
-            redacted_df[column] = suppress_column(redacted_df[column])
+            redacted_df[column] = suppress_column(redacted_df[column], n)
 
     return redacted_df
 
