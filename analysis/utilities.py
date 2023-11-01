@@ -57,26 +57,10 @@ def redact_small_numbers(
     groupby_column: column measure is grouped by, if any
     """
 
-    def suppress_column(column):
-        suppressed_column = column[column > n]
-        suppressed_count = column[column <= n].sum()
-
-        # if no values suppressed dont need to suppress anything
-        if len(suppressed_column) == len(column):
-            pass
-
-        else:
-            column[column <= n] = np.nan
-            # if not all nan make sure enough redacted
-            if column.any():
-                while suppressed_count <= n:
-                    suppressed_count += column.min()
-
-                    column[column.idxmin()] = np.nan
-
-                    # if whole column redacted stop
-                    if not column.any():
-                        break
+    def suppress_column(column, n):
+        
+        column[column <= n] = np.nan
+            
         return column
 
     df_list = []
@@ -87,7 +71,7 @@ def redact_small_numbers(
         df_subset = df.loc[df[date_column] == d, :]
 
         for column in [numerator, denominator]:
-            df_subset.loc[:, column] = suppress_column(df_subset.loc[:, column])
+            df_subset.loc[:, column] = suppress_column(df_subset.loc[:, column], n)
 
         df_subset.loc[
             (df_subset[numerator].isna()) | (df_subset[denominator].isna()), rate_column
@@ -99,12 +83,12 @@ def redact_small_numbers(
     if groupby_column:
         for column in [numerator, denominator]:
             redacted_df.groupby(by=groupby_column)[[column]].transform(
-                lambda x: suppress_column(x)
+                lambda x: suppress_column(x, n)
             )
 
     else:
         for column in [numerator, denominator]:
-            redacted_df[column] = suppress_column(redacted_df[column])
+            redacted_df[column] = suppress_column(redacted_df[column], n)
 
     return redacted_df
 
@@ -114,6 +98,7 @@ def plot_measures(
     filename: str,
     title: str,
     column_to_plot: str,
+    date_column: str,
     y_label: str,
     as_bar: bool = False,
     category: str = None,
@@ -124,32 +109,34 @@ def plot_measures(
         df: A measure table
         title: Plot title
         column_to_plot: Column name for y-axis values
+        date_column: Column name for x-axis values
         y_label: Label to use for y-axis
         as_bar: Boolean indicating if bar chart should be plotted instead of line chart. Only valid if no categories.
         category: Name of column indicating different categories
     """
     plt.figure(figsize=(15, 8))
 
-    df = df.sort_values(by="date")
+    df = df.sort_values(by=date_column)
     # mask nan values (redacted)
     mask = np.isfinite(df[column_to_plot])
-
     if category:
         df = df[df[category].notnull()]
+        
+        
         for unique_category in sorted(df[category].unique()):
             # subset on category column and sort by date
-            df_subset = df[df[category] == unique_category].sort_values("date")
+            df_subset = df[df[category] == unique_category].sort_values(date_column)
 
             plt.plot(
-                df_subset["date"][mask], df_subset[column_to_plot][mask], marker="o"
+                df_subset[date_column][mask], df_subset[column_to_plot][mask], marker="o"
             )
     else:
         if as_bar:
-            df.plot.bar("date", column_to_plot, legend=False)
+            df.plot.bar(date_column, column_to_plot, legend=False)
         else:
-            plt.plot(df["date"][mask], df[column_to_plot][mask], marker="o")
+            plt.plot(df[date_column][mask], df[column_to_plot][mask], marker="o")
 
-    x_labels = sorted(df["date"].unique())
+    x_labels = sorted(df[date_column].unique())
     plt.ylabel(y_label, fontsize=18)
     plt.xlabel("Date", fontsize=18)
     plt.xticks(x_labels, rotation="vertical", fontsize=16)

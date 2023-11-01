@@ -61,6 +61,7 @@ for frequency in ["monthly", "weekly"]:
             df=df,
             filename=f"{frequency}/joined/plot_{test}",
             column_to_plot="rate",
+            date_column="date",
             title="",
             y_label="Rate per 1000",
             as_bar=False,
@@ -71,6 +72,7 @@ for frequency in ["monthly", "weekly"]:
             df=df,
             filename=f"{frequency}/joined/plot_{test}_count",
             column_to_plot=test,
+            date_column="date",
             title="",
             y_label="Count",
             as_bar=False,
@@ -137,6 +139,7 @@ for frequency in ["monthly", "weekly"]:
                 df=df,
                 filename=f"{frequency}/joined/plot_{test}_age",
                 column_to_plot="rate",
+                date_column="date",
                 title="",
                 y_label="Rate per 1000",
                 as_bar=False,
@@ -148,6 +151,7 @@ for frequency in ["monthly", "weekly"]:
                 df=df,
                 filename=f"{frequency}/joined/plot_{test}_count_age",
                 column_to_plot=test,
+                date_column="date",
                 title="",
                 y_label="Count",
                 as_bar=False,
@@ -162,6 +166,7 @@ for frequency in ["monthly", "weekly"]:
                     df=mean_values,
                     filename=f"{frequency}/joined/plot_{test}_mean_value",
                     column_to_plot=f"{test}_numeric_value",
+                    date_column="date",
                     title="",
                     y_label="Mean test value",
                     as_bar=False,
@@ -182,39 +187,83 @@ for frequency in ["monthly", "weekly"]:
                 parse_dates=["date"],
             )
 
-            df_oor = redact_small_numbers(
-                df_oor, 7, numerator, test, "value", "date", None
-            )
-            df_oor[numerator] = df_oor[numerator].apply(
-                lambda x: round_values(x, base=5)
-            )
-            df_oor[test] = df_oor[test].apply(lambda x: round_values(x, base=5))
-            df_oor["value"] = df_oor[numerator] / df_oor[test]
+            if test=="ast":
+                # group monthly data into quarters
+                df_oor["quarter"] = df_oor["date"].dt.to_period("Q").astype(str)
+                df_oor = df_oor.groupby(by=["quarter"])[[numerator, "population"]].sum().reset_index()
+                df_oor["numerator"] = df_oor[numerator] * df_oor["population"]
+                
+                df_oor[numerator] = df_oor[numerator].apply(
+                    lambda x: round_values(x, base=5)
+                )
+
+                df_oor["population"] = df_oor["population"].apply(
+                    lambda x: round_values(x, base=5)
+                )   
+
+                df_oor["value"] = df_oor[numerator] / df_oor["population"]
+
+            else:
+
+                df_oor = redact_small_numbers(
+                    df_oor, 7, numerator, test, "value", "date", None
+                )
+                df_oor[numerator] = df_oor[numerator].apply(
+                    lambda x: round_values(x, base=5)
+                )
+                df_oor[test] = df_oor[test].apply(lambda x: round_values(x, base=5))
+                df_oor["value"] = df_oor[numerator] / df_oor[test]
+
+            df_oor["rate"] = calculate_rate(df_oor, "value")
 
             df_oor.to_csv(
                 OUTPUT_DIR / f"{frequency}/joined/redacted/{output_file}", index=False
             )
 
-            df_oor["rate"] = calculate_rate(df_oor, "value")
+            if test == "ast":
 
-            plot_measures(
-                df=df_oor,
-                filename=f"{frequency}/joined/plot_{test}_oor",
-                column_to_plot="rate",
-                title="",
-                y_label="Rate per 1000",
-                as_bar=False,
-            )
+                plot_measures(
+                    df=df_oor,
+                    filename=f"{frequency}/joined/plot_{test}_oor",
+                    column_to_plot="rate",
+                    date_column="quarter",
+                    title="",
+                    y_label="Rate per 1000",
+                    as_bar=False,
+                )
 
-            # plot counts
-            plot_measures(
-                df=df_oor,
-                filename=f"{frequency}/joined/plot_{test}_oor_count",
-                column_to_plot=numerator,
-                title="",
-                y_label="Count",
-                as_bar=False,
-            )
+                # plot counts
+                plot_measures(
+                    df=df_oor,
+                    filename=f"{frequency}/joined/plot_{test}_oor_count",
+                    column_to_plot=numerator,
+                    date_column="quarter",
+                    title="",
+                    y_label="Count",
+                    as_bar=False,
+                )
+
+            else:
+                plot_measures(
+                    df=df_oor,
+                    filename=f"{frequency}/joined/plot_{test}_oor",
+                    column_to_plot="rate",
+                    date_column="date",
+                    title="",
+                    y_label="Rate per 1000",
+                    as_bar=False,
+                )
+
+                # plot counts
+                plot_measures(
+                    df=df_oor,
+                    filename=f"{frequency}/joined/plot_{test}_oor_count",
+                    column_to_plot=numerator,
+                    date_column="date",
+                    title="",
+                    y_label="Count",
+                    as_bar=False,
+                )
 
             # chart for those with recent test and out of range
 
@@ -253,6 +302,7 @@ for frequency in ["monthly", "weekly"]:
                 df=df_oor_cov,
                 filename=f"{frequency}/joined/plot_{test}_oor_recent_cov",
                 column_to_plot="rate",
+                date_column="date",
                 title="",
                 y_label="Rate per 1000",
                 as_bar=False,
@@ -264,6 +314,7 @@ for frequency in ["monthly", "weekly"]:
                 df=df_oor_cov,
                 filename=f"{frequency}/joined/plot_{test}_oor_recent_cov_count",
                 column_to_plot=numerator,
+                date_column="date",
                 title="",
                 y_label="Count",
                 as_bar=False,
@@ -309,6 +360,7 @@ for frequency in ["monthly", "weekly"]:
                 df=df_oor_age,
                 filename=f"{frequency}/joined/plot_{test}_oor_age",
                 column_to_plot="rate",
+                date_column="date",
                 title="",
                 y_label="Rate per 1000",
                 as_bar=False,
@@ -320,6 +372,7 @@ for frequency in ["monthly", "weekly"]:
                 df=df_oor_age,
                 filename=f"{frequency}/joined/plot_{test}_oor_age_count",
                 column_to_plot=numerator,
+                date_column="date",
                 title="",
                 y_label="Count",
                 as_bar=False,
@@ -399,6 +452,7 @@ for frequency in ["monthly", "weekly"]:
                     df=demographic_df,
                     filename=f"{frequency}/joined/plot_{test}_{d}",
                     column_to_plot="rate",
+                    date_column="date",
                     title="",
                     y_label="Rate per 1000",
                     as_bar=False,
@@ -411,6 +465,7 @@ for frequency in ["monthly", "weekly"]:
                     df=demographic_df,
                     filename=f"{frequency}/joined/plot_{test}_{d}_count",
                     column_to_plot=test,
+                    date_column="date",
                     title="",
                     y_label="Count",
                     as_bar=False,
