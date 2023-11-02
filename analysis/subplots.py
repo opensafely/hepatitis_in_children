@@ -138,9 +138,9 @@ for i, j in enumerate(["gi_illness", "hepatitis"]):
     plot_measures_subplot(
         df=df,
         ax=axes[i],
-        column_to_plot=j,
+        column_to_plot="rate",
         x_label=x_label,
-        y_label="Count",
+        y_label="Rate per 1000",
         as_bar=False,
         category="age_band_months_sorted",
         show_legend=show_legend,
