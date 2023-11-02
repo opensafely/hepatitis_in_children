@@ -174,18 +174,12 @@ plt.savefig(OUTPUT_DIR / "subplot_lft.png", dpi=300)
 
 
 # lft oor rates subplot
-fig, (ax1, ax2, ax3) = plt.subplots(3, 1, figsize=(15, 8), sharex=True)
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(15, 8), sharex=True)
 
-axes = [ax1, ax2, ax3]
-for i, j in enumerate(["alt", "ast", "bilirubin"]):
+axes = [ax1, ax2]
+for i, j in enumerate(["alt", "bilirubin"]):
 
-    if j == "ast":
-        df = pd.read_csv(
-            OUTPUT_DIR / f"monthly/joined/redacted/measure_{j}_oor_rate.csv",
-            parse_dates=["quarter"],
-        )
-    
-    elif j == "bilirubin":
+    if j == "bilirubin":
         df = pd.read_csv(
             OUTPUT_DIR / f"monthly/joined/redacted/measure_{j}_oor_ref_rate.csv",
             parse_dates=["date"],
@@ -204,23 +198,10 @@ for i, j in enumerate(["alt", "ast", "bilirubin"]):
 
     elif i == 1:
         show_legend = False
-        x_label = None
-    else:
-        show_legend = False
         x_label = "Month"
 
-    if j == "ast":
-        plot_measures_subplot(
-            df=df,
-            ax=axes[i],
-            column_to_plot=f"{j}_numeric_value_out_of_range",
-            x_label=x_label,
-            y_label="Count",
-            as_bar=False,
-            show_legend=show_legend,
-        )
-    
-    elif j == "bilirubin":
+
+    if j == "bilirubin":
         plot_measures_subplot(
             df=df,
             ax=axes[i],
