@@ -80,16 +80,6 @@ def redact_small_numbers(
 
     redacted_df = pd.concat(df_list, axis=0)
 
-    if groupby_column:
-        for column in [numerator, denominator]:
-            redacted_df.groupby(by=groupby_column)[[column]].transform(
-                lambda x: suppress_column(x, n)
-            )
-
-    else:
-        for column in [numerator, denominator]:
-            redacted_df[column] = suppress_column(redacted_df[column], n)
-
     return redacted_df
 
 

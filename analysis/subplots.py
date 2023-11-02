@@ -51,12 +51,16 @@ def plot_measures_subplot(
             # subset on category column and sort by date
             df_subset = df[df[category] == unique_category].sort_values(date_column)
 
-            ax.plot(
-                df_subset["date"][mask],
-                df_subset[column_to_plot][mask],
-                marker="o",
-                label=unique_category,
-            )
+            # only plot if there are more than 10 of values present
+            if len(df_subset[column_to_plot][mask]) > 10:
+
+
+                ax.plot(
+                    df_subset["date"][mask],
+                    df_subset[column_to_plot][mask],
+                    marker="o",
+                    label=unique_category,
+                )
     else:
         if as_bar:
 
