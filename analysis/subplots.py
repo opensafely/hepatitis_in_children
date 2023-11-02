@@ -30,6 +30,18 @@ def plot_measures_subplot(
         category: Name of column indicating different categories
     """
     
+    # this is a colour mapping from age band in months category to a colour
+    colour_mapping = {
+        "0-3 months": "tab:blue",
+        "3 months - 5 years": "tab:orange",
+        "6-10": "tab:green",
+        "11-20": "tab:red",
+        "21-30": "tab:purple",
+    }
+
+
+
+
     if ("date" in df.columns) & ("age_band_months" in df.columns):
 
         df = df.sort_values(by=["date", "age_band_months_sorted"])
@@ -60,6 +72,7 @@ def plot_measures_subplot(
                     df_subset[column_to_plot][mask],
                     marker="o",
                     label=unique_category,
+                    color=colour_mapping[unique_category],
                 )
     else:
         if as_bar:
