@@ -193,6 +193,9 @@ for frequency in ["monthly", "weekly"]:
                 df_oor["quarter"] = df_oor["date"].dt.to_period("Q").astype(str)
                 df_oor = df_oor.groupby(by=["quarter"])[[numerator, "population"]].sum().reset_index()
                 
+                df_oor = redact_small_numbers(
+                    df_oor, 7, numerator, "population", "value", "quarter", None
+                )
                 
                 df_oor[numerator] = df_oor[numerator].apply(
                     lambda x: round_values(x, base=5)
@@ -393,29 +396,7 @@ for frequency in ["monthly", "weekly"]:
                 elif d == "region":
                     demographic_df = demographic_df[demographic_df["region"].notnull()]
 
-                # if alt, combine 0-3 months and 3 months-5 yrs
-
-                if (d == "age_band_months") & (
-                    ((frequency == "weekly") & (test == "alt")) | ((test == "ast"))
-                ):
-                    demographic_df.loc[
-                        demographic_df["age_band_months"].isin(
-                            ["0-3 months", "3 months - 5 years"]
-                        ),
-                        "age_band_months",
-                    ] = "0-5"
-                    demographic_df = (
-                        demographic_df.groupby(by=["date", "age_band_months"])[
-                            [test, "population"]
-                        ]
-                        .sum()
-                        .reset_index()
-                    )
-
-                    demographic_df["value"] = (
-                        demographic_df[test] / demographic_df["population"]
-                    )
-
+                
                 
                 demographic_df = redact_small_numbers(
                     demographic_df, 7, test, "population", "value", "date", d
